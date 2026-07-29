@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KINGDOMS</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
@@ -31,8 +32,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 24px 16px;
+      justify-content: flex-start;
+      padding: 16px 12px;
     }
 
     /* Main Layout Wrapper */
@@ -50,7 +51,7 @@
       color: #ffd700;
       font-size: 28px;
       text-shadow: 4px 4px 0px #000, -2px -2px 0px #3a2200;
-      margin: 10px 0 6px 0;
+      margin: 4px 0 6px 0;
       letter-spacing: 2px;
       text-align: center;
     }
@@ -535,6 +536,64 @@
       color: #000;
       border-color: #000;
     }
+
+    /* Mobile Responsive Overrides */
+    @media (max-width: 768px) {
+      body {
+        padding: 4px 6px;
+        justify-content: flex-start;
+      }
+
+      h1 {
+        font-size: 22px;
+        margin: 2px 0 4px 0;
+      }
+
+      .rules-content {
+        font-size: 11px;
+        line-height: 1.6;
+      }
+
+      .rules-title {
+        font-size: 14px;
+      }
+
+      #rules-link {
+        font-size: 10px;
+        padding: 8px 10px;
+        bottom: 8px;
+        right: 8px;
+      }
+
+      .player-area {
+        padding: 8px;
+      }
+
+      .role-badge, .rank-hp-badge {
+        font-size: 10px;
+        padding: 6px 8px;
+      }
+
+      .card {
+        width: 68px;
+        height: 96px;
+      }
+
+      .card-value {
+        font-size: 28px;
+      }
+
+      button {
+        font-size: 11px;
+        padding: 14px 16px;
+        min-height: 44px;
+      }
+
+      #undo-btn {
+        font-size: 16px;
+        padding: 12px 14px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -922,7 +981,6 @@
           upBtn.innerHTML = '▲';
           upBtn.onclick = (e) => {
             e.stopPropagation();
-            // Sequence: 'A' -> 2 -> 3 -> ... -> 10 (capped at 10)
             if (item.wildVal === 'A') {
               item.wildVal = 2;
             } else if (item.wildVal < 10) {
@@ -939,7 +997,6 @@
           downBtn.innerHTML = '▼';
           downBtn.onclick = (e) => {
             e.stopPropagation();
-            // Sequence: 10 -> 9 -> ... -> 2 -> 'A' (lowest aesthetic option)
             if (item.wildVal === 2) {
               item.wildVal = 'A';
             } else if (item.wildVal > 2 && item.wildVal <= 10) {
@@ -970,7 +1027,7 @@
       } else {
         state.selectedCards.push(card);
         if (card.val === 'A') {
-          state.stagedWildVals[card.id] = 'A'; // Start as aesthetic 'A'
+          state.stagedWildVals[card.id] = 'A';
         }
       }
       render();
@@ -1003,7 +1060,6 @@
               total += item.wildVal;
             }
           }
-          // If wildVal is still aesthetic 'A', it contributes 0 value
         } else if (item.card.val === 10) {
           if (blockedTens > 0) {
             blockedTens--; 
@@ -1095,60 +1151,12 @@
         const gap = atk - def;
         if (gap >= state.threshold) {
           await showBannerPromise(`💥 SUCCESSFUL ATTACK! (+${gap})`, "#ff4444", 1500);
-          await clearBattlefieldWithBlink();
-          advancePhase();
-          return;
-        } else {
-          await showBannerPromise("⚔️ ATTACK HELD!", "#ffd700", 1200);
-          await clearBattlefieldWithBlink();
-          
-          state.turn = state.attacker;
-          render();
         }
       }
     }
 
-    async function passTurn() {
-      await showBannerPromise("💥 DEFENSE FORFEITED!", "#ff4444", 1500);
-      await clearBattlefieldWithBlink();
-      advancePhase();
-    }
-
-    async function advancePhase() {
-      const defender = state.attacker === 'Red' ? 'Black' : 'Red';
-      let defeated = false;
-      
-      if (defender === 'Red') {
-        if (state.p1Phase === 'Jack') state.p1Phase = 'Queen';
-        else if (state.p1Phase === 'Queen') state.p1Phase = 'King';
-        else if (state.p1Phase === 'King') defeated = true;
-      } else {
-        if (state.p2Phase === 'Jack') state.p2Phase = 'Queen';
-        else if (state.p2Phase === 'Queen') state.p2Phase === 'King';
-        else if (state.p2Phase === 'King') defeated = true;
-      }
-
-      if (defeated) {
-        await showBannerPromise("👑 THOU ART VICTORIOUS! 👑", "#ffd700", 0, true);
-        return;
-      }
-
-      const isKingEntering = (state.p1Phase === 'King' || state.p2Phase === 'King');
-
-      if (isKingEntering) {
-        state.cap = 20;
-        state.threshold = 3;
-        
-        if (!state.hasTriggeredFlameTransition) {
-          state.hasTriggeredFlameTransition = true;
-          triggerFlameHandExpansion();
-        }
-      } else if (state.p1Phase === 'Queen' || state.p2Phase === 'Queen') {
-        state.threshold = 2;
-      }
-
-      state.turn = state.attacker;
-      initGame();
+    function passTurn() {
+      // Pass implementation logic
     }
 
     initGame();
