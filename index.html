@@ -28,6 +28,36 @@
             line-height: 1.4;
             max-width: 600px;
             margin-bottom: 20px;
+            cursor: pointer; /* Indicates it's clickable */
+        }
+
+        /* Full-screen overlay styles for rules (hidden by default on PC) */
+        .rules-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #121212;
+            z-index: 1000;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        .rules-overlay.active {
+            display: block;
+        }
+
+        .close-rules-btn {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-bottom: 20px;
         }
 
         button {
@@ -36,7 +66,7 @@
             cursor: pointer;
         }
 
-        /* Mobile-Specific Overrides (triggers only on screens smaller than 768px) */
+        /* Mobile-Specific Overrides (triggers only on screens smaller than 768px, covering iPhones) */
         @media (max-width: 768px) {
             body {
                 padding: 10px; /* Removes excessive top margin on phones */
@@ -44,24 +74,30 @@
             }
 
             h1 {
-                font-size: 2.2rem; /* Make title bigger and prominent on phone */
+                font-size: 2.8rem; /* Make title bigger and prominent on phone */
                 text-align: center;
             }
 
             .rules-container {
-                font-size: 1.15rem; /* Make rules significantly easier to read on mobile */
+                font-size: 1.15rem; /* Make rules easier to read on mobile */
                 line-height: 1.6;
             }
 
-            button {
-                padding: 14px 20px; /* Makes submit/action buttons taller for easy thumb tapping */
-                font-size: 1.2rem;   /* Larger text inside buttons */
-                min-height: 48px;    /* Standard touch-target height */
+            /* Battlefield buttons, general buttons, and Ace arrows */
+            button, 
+            .battlefield-btn, 
+            .ace-arrow, 
+            input[type="button"], 
+            input[type="submit"] {
+                padding: 16px 24px; /* Bigger buttons for iPhone */
+                font-size: 1.4rem;    /* Larger text/arrows */
+                min-height: 52px;     /* Comfortable touch-target height */
+                min-width: 52px;
                 margin-top: 8px;
                 margin-bottom: 8px;
             }
             
-            /* If you have specific input fields or dynamic select boxes for the Ace, scale them up too */
+            /* Input fields and select boxes scaling */
             input, select {
                 font-size: 1.1rem;
                 padding: 10px;
@@ -73,14 +109,40 @@
 
     <h1>Kingdoms</h1>
 
-    <div class="rules-container">
-        <p><strong>Quick Rules:</strong> Progress through Jack, Queen, and King phases. Manage your HP scaling, look out for the 2 vs 10 counter-logic, and use the Ace-as-Wild interactive UI to adjust values on the fly.</p>
+    <!-- Rules Container (Clickable to trigger full-screen view on mobile) -->
+    <div class="rules-container" id="rules-trigger">
+        <p><strong>Quick Rules:</strong> Progress through Jack, Queen, and King phases. Manage your HP scaling, look out for the 2 vs 10 counter-logic, and use the Ace-as-Wild interactive UI to adjust values on the fly. <em>(Tap to view full screen)</em></p>
+    </div>
+
+    <!-- Full-Screen Scrollable Rules Overlay -->
+    <div class="rules-overlay" id="rules-overlay">
+        <button class="close-rules-btn" id="close-rules-btn">Close Rules</button>
+        <h2>Kingdoms: Full Rules</h2>
+        <p>Progress through Jack, Queen, and King phases. Manage your HP scaling, look out for the 2 vs 10 counter-logic, and use the Ace-as-Wild interactive UI to adjust values on the fly.</p>
+        <p>Detailed gameplay guidelines, phase mechanics, scoring configurations, and advanced strategic layouts go here. This overlay is fully scrollable and covers the entire screen on mobile devices.</p>
     </div>
 
     <!-- Your existing game interface elements go here -->
     <div id="game-container">
         <button id="submit-btn">Submit Move</button>
     </div>
+
+    <script>
+        // JavaScript to handle opening and closing the full-screen rules view on mobile
+        const rulesTrigger = document.getElementById('rules-trigger');
+        const rulesOverlay = document.getElementById('rules-overlay');
+        const closeRulesBtn = document.getElementById('close-rules-btn');
+
+        rulesTrigger.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                rulesOverlay.classList.add('active');
+            }
+        });
+
+        closeRulesBtn.addEventListener('click', () => {
+            rulesOverlay.classList.remove('active');
+        });
+    </script>
 
 </body>
 </html>
