@@ -535,6 +535,68 @@
       color: #000;
       border-color: #000;
     }
+
+    /* --- MOBILE MEDIA QUERY FIXES --- */
+    @media (max-width: 768px) {
+      body {
+        justify-content: flex-start;
+        overflow-y: auto;
+      }
+
+      /* 1. Bigger title on phone */
+      h1 {
+        font-size: 22px;
+        letter-spacing: 1px;
+      }
+
+      /* 2. Bigger Battlefield Cards on phone */
+      #attack-cards .card,
+      #defense-cards .card {
+        width: 72px;
+        height: 100px;
+      }
+      
+      #attack-cards .card-value,
+      #defense-cards .card-value {
+        font-size: 32px;
+      }
+
+      /* Match slot height to accommodate larger cards */
+      .battlefield-slot {
+        height: 144px;
+        min-height: 144px;
+        max-height: 144px;
+      }
+
+      /* 3. Bigger Ace arrows (wild-btn) on phone */
+      .wild-btn {
+        width: 40px;
+        height: 32px;
+        font-size: 14px;
+      }
+
+      /* 4. Bigger Rules Content on phone */
+      .rules-content {
+        font-size: 13px;
+        line-height: 1.6;
+      }
+
+      .rules-title {
+        font-size: 16px;
+      }
+
+      /* 5. Fix scrolling/modal layout so users can easily exit the rule-list */
+      #rules-overlay {
+        align-items: flex-start;
+        overflow-y: auto;
+        padding: 24px 12px;
+      }
+
+      .rules-box {
+        max-height: none;
+        margin: auto 0;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1099,8 +1161,9 @@
           advancePhase();
           return;
         } else {
-          await showBannerPromise("⚔️ ATTACK HELD!", "#ffd700", 1200);
+          await showBannerPromise("🛡️ HELD OFF!", "#4a90e2", 1200);
           await clearBattlefieldWithBlink();
+          await animateLabelSwapPromise();
           
           state.turn = state.attacker;
           render();
@@ -1109,49 +1172,49 @@
     }
 
     async function passTurn() {
-      await showBannerPromise("💥 DEFENSE FORFEITED!", "#ff4444", 1500);
+      if (state.turn === state.attacker) return;
+      await showBannerPromise("🏳️ FORFEIT ROUND!", "#ff4444", 1200);
       await clearBattlefieldWithBlink();
       advancePhase();
     }
 
-    async function advancePhase() {
-      const defender = state.attacker === 'Red' ? 'Black' : 'Red';
-      let defeated = false;
+    function advancePhase() {
+      const defenderColor = state.attacker === 'Red' ? 'Black' : 'Red';
       
-      if (defender === 'Red') {
+      if (defenderColor === 'Red') {
         if (state.p1Phase === 'Jack') state.p1Phase = 'Queen';
         else if (state.p1Phase === 'Queen') state.p1Phase = 'King';
-        else if (state.p1Phase === 'King') defeated = true;
+        else {
+          showBannerPromise("👑 BLACK WINS THE WAR! 👑", "#ffd700", 0, true);
+          return;
+        }
       } else {
         if (state.p2Phase === 'Jack') state.p2Phase = 'Queen';
-        else if (state.p2Phase === 'Queen') state.p2Phase === 'King';
-        else if (state.p2Phase === 'King') defeated = true;
+        else if (state.p2Phase === 'Queen') state.p2Phase = 'King';
+        else {
+          showBannerPromise("👑 RED WINS THE WAR! 👑", "#ffd700", 0, true);
+          return;
+        }
       }
 
-      if (defeated) {
-        await showBannerPromise("👑 THOU ART VICTORIOUS! 👑", "#ffd700", 0, true);
-        return;
-      }
-
-      const isKingEntering = (state.p1Phase === 'King' || state.p2Phase === 'King');
-
-      if (isKingEntering) {
+      const isNowKingPhase = state.p1Phase === 'King' || state.p2Phase === 'King';
+      if (isNowKingPhase && state.cap === 10) {
         state.cap = 20;
         state.threshold = 3;
-        
-        if (!state.hasTriggeredFlameTransition) {
-          state.hasTriggeredFlameTransition = true;
-          triggerFlameHandExpansion();
-        }
       } else if (state.p1Phase === 'Queen' || state.p2Phase === 'Queen') {
         state.threshold = 2;
       }
 
+      state.attacker = defenderColor;
       state.turn = state.attacker;
+      
+      triggerFlameHandExpansion();
       initGame();
     }
 
-    initGame();
+    window.onload = () => {
+      initGame();
+    };
   </script>
 </body>
 </html>
