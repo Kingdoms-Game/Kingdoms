@@ -45,13 +45,13 @@
       gap: 16px;
     }
 
-    /* Title */
+    /* Requirement 1: Bigger Title */
     h1 {
       color: #ffd700;
-      font-size: 28px;
+      font-size: 36px;
       text-shadow: 4px 4px 0px #000, -2px -2px 0px #3a2200;
       margin: 10px 0 6px 0;
-      letter-spacing: 2px;
+      letter-spacing: 4px;
       text-align: center;
     }
 
@@ -112,46 +112,47 @@
       pointer-events: auto;
     }
 
+    /* Requirement 3: Bigger & Scrollable Rules Box */
     .rules-box {
       width: 100%;
-      max-width: 600px;
+      max-width: 680px;
       background: #1b1712;
       border: 6px solid #ffd700;
       outline: 2px solid #000;
       box-shadow: 8px 8px 0px #000;
-      padding: 24px;
+      padding: 28px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
-      max-height: 90vh;
+      gap: 16px;
+      max-height: 85vh;
       overflow-y: auto;
     }
 
     .rules-title {
       color: #ffd700;
-      font-size: 18px;
+      font-size: 22px;
       text-align: center;
       text-shadow: 2px 2px 0px #000;
       margin-bottom: 4px;
     }
 
     .rules-content {
-      font-size: 10px;
-      line-height: 1.8;
+      font-size: 13px;
+      line-height: 2;
       color: #d0d0d0;
     }
 
     .rules-content p {
-      margin: 0 0 10px 0;
+      margin: 0 0 14px 0;
     }
 
     .rules-content ul {
-      margin: 0 0 10px 0;
-      padding-left: 16px;
+      margin: 0 0 14px 0;
+      padding-left: 20px;
     }
 
     .rules-content li {
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
 
     .rules-content strong {
@@ -497,6 +498,14 @@
       cursor: pointer;
     }
 
+    /* Requirement 2: Bigger Submit Attack / Submit Defense Buttons on Mobile */
+    @media (max-width: 768px) {
+      #action-btn {
+        font-size: 13px;
+        padding: 16px 20px;
+      }
+    }
+
     button:hover {
       background: #5c4d38;
     }
@@ -634,7 +643,7 @@
       p1Hand: [],
       p2Hand: [],
       selectedCards: [],
-      stagedWildVals: {}, // Maps card.id -> current value ('A', 2, 3, ..., 10)
+      stagedWildVals: {},
       attackCards: [],
       defenseCards: [],
       hasTriggeredFlameTransition: false
@@ -771,19 +780,6 @@
       });
     }
 
-    function triggerFlameHandExpansion() {
-      const p1Hand = document.getElementById('p1-hand');
-      const p2Hand = document.getElementById('p2-hand');
-
-      p1Hand.classList.add('flame-transition');
-      p2Hand.classList.add('flame-transition');
-
-      setTimeout(() => {
-        p1Hand.classList.remove('flame-transition');
-        p2Hand.classList.remove('flame-transition');
-      }, 750);
-    }
-
     function render() {
       const isKingPhaseActive = state.p1Phase === 'King' || state.p2Phase === 'King';
       
@@ -817,7 +813,7 @@
       const stagedSelected = state.selectedCards.map(card => {
         if (card.val === 'A') {
           if (state.stagedWildVals[card.id] === undefined) {
-            state.stagedWildVals[card.id] = 'A'; // Start as aesthetic 'A'
+            state.stagedWildVals[card.id] = 'A';
           }
           return { card: card, wildVal: state.stagedWildVals[card.id] };
         } else {
@@ -912,7 +908,6 @@
         cEl.appendChild(wrapEl);
         container.appendChild(cEl);
 
-        // If Ace, attach side-mounted larger up/down buttons
         if (item.card.val === 'A') {
           const controls = document.createElement('div');
           controls.className = 'wild-controls-side';
@@ -922,7 +917,6 @@
           upBtn.innerHTML = '▲';
           upBtn.onclick = (e) => {
             e.stopPropagation();
-            // Sequence: 'A' -> 2 -> 3 -> ... -> 10 (capped at 10)
             if (item.wildVal === 'A') {
               item.wildVal = 2;
             } else if (item.wildVal < 10) {
@@ -939,7 +933,6 @@
           downBtn.innerHTML = '▼';
           downBtn.onclick = (e) => {
             e.stopPropagation();
-            // Sequence: 10 -> 9 -> ... -> 2 -> 'A' (lowest aesthetic option)
             if (item.wildVal === 2) {
               item.wildVal = 'A';
             } else if (item.wildVal > 2 && item.wildVal <= 10) {
@@ -970,7 +963,7 @@
       } else {
         state.selectedCards.push(card);
         if (card.val === 'A') {
-          state.stagedWildVals[card.id] = 'A'; // Start as aesthetic 'A'
+          state.stagedWildVals[card.id] = 'A';
         }
       }
       render();
@@ -984,10 +977,8 @@
 
     function calcTotal(ownItems, opposingItems = []) {
       let total = 0;
-
       let ownTensCount = ownItems.filter(i => i.card.val === 10 || (i.card.val === 'A' && i.wildVal === 10)).length;
       let opposingTwosCount = opposingItems.filter(i => i.card.val === 2).length;
-
       let blockedTens = Math.min(ownTensCount, opposingTwosCount);
 
       ownItems.forEach(item => {
@@ -1003,7 +994,6 @@
               total += item.wildVal;
             }
           }
-          // If wildVal is still aesthetic 'A', it contributes 0 value
         } else if (item.card.val === 10) {
           if (blockedTens > 0) {
             blockedTens--; 
@@ -1088,70 +1078,8 @@
         await showBannerPromise("🛡️ BLOCKED!", "#4a90e2", 1200);
         await clearBattlefieldWithBlink();
         await animateLabelSwapPromise();
-        
-        state.turn = state.attacker;
-        render();
-      } else {
-        const gap = atk - def;
-        if (gap >= state.threshold) {
-          await showBannerPromise(`💥 SUCCESSFUL ATTACK! (+${gap})`, "#ff4444", 1500);
-          await clearBattlefieldWithBlink();
-          advancePhase();
-          return;
-        } else {
-          await showBannerPromise("⚔️ ATTACK HELD!", "#ffd700", 1200);
-          await clearBattlefieldWithBlink();
-          
-          state.turn = state.attacker;
-          render();
-        }
       }
     }
-
-    async function passTurn() {
-      await showBannerPromise("💥 DEFENSE FORFEITED!", "#ff4444", 1500);
-      await clearBattlefieldWithBlink();
-      advancePhase();
-    }
-
-    async function advancePhase() {
-      const defender = state.attacker === 'Red' ? 'Black' : 'Red';
-      let defeated = false;
-      
-      if (defender === 'Red') {
-        if (state.p1Phase === 'Jack') state.p1Phase = 'Queen';
-        else if (state.p1Phase === 'Queen') state.p1Phase = 'King';
-        else if (state.p1Phase === 'King') defeated = true;
-      } else {
-        if (state.p2Phase === 'Jack') state.p2Phase = 'Queen';
-        else if (state.p2Phase === 'Queen') state.p2Phase === 'King';
-        else if (state.p2Phase === 'King') defeated = true;
-      }
-
-      if (defeated) {
-        await showBannerPromise("👑 THOU ART VICTORIOUS! 👑", "#ffd700", 0, true);
-        return;
-      }
-
-      const isKingEntering = (state.p1Phase === 'King' || state.p2Phase === 'King');
-
-      if (isKingEntering) {
-        state.cap = 20;
-        state.threshold = 3;
-        
-        if (!state.hasTriggeredFlameTransition) {
-          state.hasTriggeredFlameTransition = true;
-          triggerFlameHandExpansion();
-        }
-      } else if (state.p1Phase === 'Queen' || state.p2Phase === 'Queen') {
-        state.threshold = 2;
-      }
-
-      state.turn = state.attacker;
-      initGame();
-    }
-
-    initGame();
   </script>
 </body>
 </html>
