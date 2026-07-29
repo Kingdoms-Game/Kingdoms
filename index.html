@@ -545,7 +545,7 @@
       }
 
       h1 {
-        font-size: 20px;
+        font-size: 26px;
         margin: 2px 0 2px 0;
       }
 
@@ -553,13 +553,19 @@
         gap: 6px;
       }
 
+      /* Make the rules box scrollable for easy-exit and larger text */
+      .rules-box {
+        max-height: 85vh;
+        overflow-y: auto;
+      }
+
       .rules-content {
-        font-size: 13px;
-        line-height: 1.7;
+        font-size: 15px;
+        line-height: 1.8;
       }
 
       .rules-title {
-        font-size: 15px;
+        font-size: 18px;
       }
 
       #rules-link {
@@ -587,10 +593,11 @@
         font-size: 24px;
       }
 
+      /* Make battlefield buttons bigger on mobile ONLY */
       .wild-btn {
-        width: 40px;
-        height: 34px;
-        font-size: 14px;
+        width: 48px;
+        height: 38px;
+        font-size: 16px;
       }
 
       button {
@@ -1124,52 +1131,101 @@
 
       if (state.turn === state.attacker) {
         state.attackCards = [...state.attackCards, ...stagedItems];
-        removeSelectedFromHand();
+        // Remove played cards from attacker hand
+        state.p1Hand = state.attacker === 'Red' ? state.p1Hand.filter(c => !state.selectedCards.includes(c)) : state.p1Hand;
+        state.p2Hand = state.attacker === 'Black' ? state.p2Hand.filter(c => !state.selectedCards.includes(c)) : state.p2Hand;
+
         state.selectedCards = [];
         state.stagedWildVals = {};
         state.turn = state.attacker === 'Red' ? 'Black' : 'Red';
         render();
       } else {
+        // Defender submits
         state.defenseCards = [...state.defenseCards, ...stagedItems];
-        removeSelectedFromHand();
+        state.p1Hand = state.attacker === 'Black' ? state.p1Hand.filter(c => !state.selectedCards.includes(c)) : state.p1Hand;
+        state.p2Hand = state.attacker === 'Red' ? state.p2Hand.filter(c => !state.selectedCards.includes(c)) : state.p2Hand;
+
         state.selectedCards = [];
         state.stagedWildVals = {};
-        resolveCombat();
-      }
-    }
-
-    function removeSelectedFromHand() {
-      if (state.turn === 'Red') {
-        state.p1Hand = state.p1Hand.filter(c => !state.selectedCards.includes(c));
-      } else {
-        state.p2Hand = state.p2Hand.filter(c => !state.selectedCards.includes(c));
-      }
-    }
-
-    async function resolveCombat() {
-      const atk = calcTotal(state.attackCards, state.defenseCards);
-      const def = calcTotal(state.defenseCards, state.attackCards);
-
-      if (def >= atk) {
-        await showBannerPromise("🛡️ BLOCKED!", "#4a90e2", 1200);
-        await clearBattlefieldWithBlink();
-        await animateLabelSwapPromise();
-        
-        state.turn = state.attacker;
         render();
-      } else {
-        const gap = atk - def;
-        if (gap >= state.threshold) {
-          await showBannerPromise(`💥 SUCCESSFUL ATTACK! (+${gap})`, "#ff4444", 1500);
+
+        // Evaluate combat results
+        const finalAtkTotal = calcTotal(state.attackCards, state.defenseCards);
+        const finalDefTotal = calcTotal(state.defenseCards, state.attackCards);
+
+        if (finalDefTotal >= finalAtkTotal) {
+          // Blocked!
+          await showBannerPromise("🛡️ BLOCKED!", "#4a90e2", 1200);
+          await clearBattlefieldWithBlink();
+          await animateLabelSwapPromise();
+        } else {
+          // Check success threshold
+          const diff = finalAtkTotal - finalDefTotal;
+          if (diff >= state.threshold) {
+            // Success! Attacker scores against defender phase
+            await showBannerPromise("⚔️ SUCCESS!", "#ff4444", 1200);
+            await handlePhaseProgression();
+          } else {
+            // Not enough difference yet, defender must respond or pass
+            state.turn = state.turn === 'Red' ? 'Black' : 'Red';
+            render();
+          }
         }
       }
     }
 
-    function passTurn() {
-      // Pass implementation logic
+    async function passTurn() {
+      // Defender passes/forfeits round
+      await showBannerPromise("🏳️ FORFEIT!", "#ff4444", 1200);
+      await handlePhaseProgression();
     }
 
-    initGame();
+    async function handlePhaseProgression() {
+      const scoringPlayer = state.attacker;
+      let transitionedToKing = false;
+
+      if (scoringPlayer === 'Red') {
+        if (state.p1Phase === 'Jack') state.p1Phase = 'Queen';
+        else if (state.p1Phase === 'Queen') {
+          state.p1Phase = 'King';
+          transitionedToKing = true;
+        }
+        else if (state.p1Phase === 'King') {
+          // Red wins game!
+          await clearBattlefieldWithBlink();
+          await showBannerPromise("👑 RED WINS THE CROWN!", "#ffd700", 0, true);
+          return;
+        }
+      } else {
+        if (state.p2Phase === 'Jack') state.p2Phase = 'Queen';
+        else if (state.p2Phase === 'Queen') {
+          state.p2Phase = 'King';
+          transitionedToKing = true;
+        }
+        else if (state.p2Phase === 'King') {
+          // Black wins game!
+          await clearBattlefieldWithBlink();
+          await showBannerPromise("👑 BLACK WINS THE CROWN!", "#ffd700", 0, true);
+          return;
+        }
+      }
+
+      if (transitionedToKing) {
+        state.cap = 20;
+        state.threshold = 3;
+        triggerFlameHandExpansion();
+        await showBannerPromise("🔥 KING ROUND ACTIVATED (MAX: 20) 🔥", "#ff8c00", 1800);
+      } else {
+        state.threshold = state.p1Phase === 'Queen' || state.p2Phase === 'Queen' ? 2 : 1;
+      }
+
+      await clearBattlefieldWithBlink();
+      initGame();
+    }
+
+    window.onload = () => {
+      initGame();
+    };
   </script>
 </body>
 </html>
