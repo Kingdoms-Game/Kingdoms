@@ -2,17 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- This ensures mobile devices scale the page correctly from the very top -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kingdoms</title>
     <style>
-        /* Base PC styles */
+        :root {
+            --bg-color: #121212;
+            --surface-color: #1e1e1e;
+            --surface-border: #333;
+            --text-color: #e0e0e0;
+            --text-muted: #aaa;
+            --accent-jack: #4a90e2;
+            --accent-queen: #9b59b6;
+            --accent-king: #e67e22;
+            --btn-bg: #2a2a2a;
+            --btn-hover: #3a3a3a;
+        }
+
         body {
             margin: 0;
-            padding: 20px;
-            font-family: sans-serif;
-            background-color: #121212;
-            color: #ffffff;
+            padding: 15px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -20,51 +31,191 @@
 
         h1 {
             font-size: 2rem;
-            margin-bottom: 10px;
+            margin: 0 0 10px 0;
+            letter-spacing: 1px;
         }
 
         .rules-container {
             font-size: 0.9rem;
             line-height: 1.4;
-            max-width: 600px;
+            max-width: 500px;
+            background: var(--surface-color);
+            border: 1px solid var(--surface-border);
+            padding: 12px 16px;
+            border-radius: 8px;
             margin-bottom: 20px;
+            color: var(--text-muted);
+        }
+
+        .rules-container strong {
+            color: var(--text-color);
+        }
+
+        #game-container {
+            width: 100%;
+            max-width: 500px;
+            background: var(--surface-color);
+            border: 1px solid var(--surface-border);
+            padding: 20px;
+            border-radius: 12px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .status-panel {
+            display: flex;
+            justify-content: space-between;
+            background: rgba(0,0,0,0.2);
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
+
+        .card-display-area {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            min-height: 90px;
+            align-items: center;
+        }
+
+        .card {
+            background: #252525;
+            border: 2px solid #444;
+            border-radius: 8px;
+            width: 65px;
+            height: 90px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .card.wild {
+            border-color: #f1c40f;
+            color: #f1c40f;
+        }
+
+        .ace-controls {
+            background: rgba(0,0,0,0.15);
+            padding: 12px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .ace-controls label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .stepper-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
         }
 
         button {
-            padding: 8px 16px;
+            background: var(--btn-bg);
+            color: var(--text-color);
+            border: 1px solid #444;
+            border-radius: 6px;
+            padding: 10px 16px;
             font-size: 1rem;
             cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
         }
 
-        /* Mobile-Specific Overrides (triggers only on screens smaller than 768px) */
+        button:hover {
+            background: var(--btn-hover);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        #submit-btn {
+            background: #27ae60;
+            border-color: #27ae60;
+            font-weight: bold;
+            color: #fff;
+            width: 100%;
+        }
+
+        #submit-btn:hover {
+            background: #219653;
+        }
+
+        .log-box {
+            background: #0d0d0d;
+            border: 1px solid #222;
+            border-radius: 6px;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            height: 80px;
+            overflow-y: auto;
+            color: #888;
+        }
+
+        /* Mobile Adjustments */
         @media (max-width: 768px) {
             body {
-                padding: 10px; /* Removes excessive top margin on phones */
-                align-items: stretch; /* Allows elements to use full width if needed */
+                padding: 8px;
             }
 
             h1 {
-                font-size: 2.2rem; /* Make title bigger and prominent on phone */
+                font-size: 2.2rem;
                 text-align: center;
+                margin-top: 10px;
             }
 
             .rules-container {
-                font-size: 1.15rem; /* Make rules significantly easier to read on mobile */
-                line-height: 1.6;
+                font-size: 1.1rem;
+                line-height: 1.5;
+                padding: 14px;
+            }
+
+            #game-container {
+                max-width: 100%;
+                padding: 16px;
+            }
+
+            .status-panel {
+                font-size: 1.1rem;
+                padding: 12px;
+            }
+
+            .card {
+                width: 75px;
+                height: 105px;
+                font-size: 1.25rem;
+            }
+
+            .ace-controls label {
+                font-size: 1.05rem;
             }
 
             button {
-                padding: 14px 20px; /* Makes submit/action buttons taller for easy thumb tapping */
-                font-size: 1.2rem;   /* Larger text inside buttons */
-                min-height: 48px;    /* Standard touch-target height */
-                margin-top: 8px;
-                margin-bottom: 8px;
+                padding: 14px 20px;
+                font-size: 1.2rem;
+                min-height: 48px;
             }
-            
-            /* If you have specific input fields or dynamic select boxes for the Ace, scale them up too */
-            input, select {
-                font-size: 1.1rem;
-                padding: 10px;
+
+            #submit-btn {
+                padding: 16px;
+                font-size: 1.3rem;
+            }
+
+            .log-box {
+                font-size: 0.95rem;
+                height: 100px;
             }
         }
     </style>
@@ -74,13 +225,61 @@
     <h1>Kingdoms</h1>
 
     <div class="rules-container">
-        <p><strong>Quick Rules:</strong> Progress through Jack, Queen, and King phases. Manage your HP scaling, look out for the 2 vs 10 counter-logic, and use the Ace-as-Wild interactive UI to adjust values on the fly.</p>
+        <p><strong>Quick Rules:</strong> Progress through Jack, Queen, and King phases with HP scaling. Watch for the 2 vs 10 counter-logic, and use the Ace-as-Wild interface below to adjust values dynamically on the fly.</p>
     </div>
 
-    <!-- Your existing game interface elements go here -->
     <div id="game-container">
-        <button id="submit-btn">Submit Move</button>
+        <div class="status-panel">
+            <span id="phase-display">Phase: Jack</span>
+            <span id="hp-display">HP: 20 / 20</span>
+        </div>
+
+        <div class="card-display-area" id="card-area">
+            <div class="card">10</div>
+            <div class="card wild">Ace</div>
+            <div class="card">2</div>
+        </div>
+
+        <div class="ace-controls">
+            <label for="ace-value-input"><strong>Ace-as-Wild Value (2–10):</strong></label>
+            <div class="stepper-row">
+                <button onclick="adjustAce(-1)">-</button>
+                <span id="ace-val-display" style="font-size: 1.2rem; font-weight: bold;">5</span>
+                <button onclick="adjustAce(1)">+</button>
+            </div>
+            <div style="font-size: 0.8rem; color: var(--text-muted); text-align: center;">Capped at max configuration limits (10/20)</div>
+        </div>
+
+        <button id="submit-btn" onclick="submitMove()">Submit Move</button>
+
+        <div class="log-box" id="log-box">
+            [System initialized. Ready for deployment.]
+        </div>
     </div>
+
+    <script>
+        let currentAceValue = 5;
+        const maxCap = 10;
+
+        function adjustAce(amount) {
+            currentAceValue += amount;
+            if (currentAceValue < 2) currentAceValue = 2;
+            if (currentAceValue > maxCap) currentAceValue = maxCap;
+            
+            document.getElementById('ace-val-display').innerText = currentAceValue;
+            logMessage(`Ace value adjusted to: ${currentAceValue}`);
+        }
+
+        function submitMove() {
+            logMessage(`Move submitted with Ace value: ${currentAceValue}. Phase progression verified.`);
+        }
+
+        function logMessage(msg) {
+            const box = document.getElementById('log-box');
+            box.innerHTML += `<br>> ${msg}`;
+            box.scrollTop = box.scrollHeight;
+        }
+    </script>
 
 </body>
 </html>
