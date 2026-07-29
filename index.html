@@ -33,7 +33,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      padding: 16px 12px;
+      padding: 8px 8px;
     }
 
     /* Main Layout Wrapper */
@@ -43,15 +43,15 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 16px;
+      gap: 10px;
     }
 
     /* Title */
     h1 {
       color: #ffd700;
-      font-size: 28px;
+      font-size: 26px;
       text-shadow: 4px 4px 0px #000, -2px -2px 0px #3a2200;
-      margin: 4px 0 6px 0;
+      margin: 2px 0 4px 0;
       letter-spacing: 2px;
       text-align: center;
     }
@@ -97,7 +97,7 @@
     #rules-overlay {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0, 0, 0, 0.85);
       z-index: 200;
       display: flex;
       align-items: center;
@@ -105,7 +105,7 @@
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.2s ease-out;
-      padding: 16px;
+      padding: 12px;
     }
 
     #rules-overlay.show {
@@ -115,44 +115,44 @@
 
     .rules-box {
       width: 100%;
-      max-width: 600px;
+      max-width: 650px;
       background: #1b1712;
       border: 6px solid #ffd700;
       outline: 2px solid #000;
       box-shadow: 8px 8px 0px #000;
-      padding: 24px;
+      padding: 20px 22px;
       display: flex;
       flex-direction: column;
       gap: 14px;
-      max-height: 90vh;
+      max-height: 92vh;
       overflow-y: auto;
     }
 
     .rules-title {
       color: #ffd700;
-      font-size: 18px;
+      font-size: 16px;
       text-align: center;
       text-shadow: 2px 2px 0px #000;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
 
     .rules-content {
-      font-size: 10px;
-      line-height: 1.8;
-      color: #d0d0d0;
+      font-size: 13px;
+      line-height: 1.85;
+      color: #e2ded8;
     }
 
     .rules-content p {
-      margin: 0 0 10px 0;
+      margin: 0 0 12px 0;
     }
 
     .rules-content ul {
-      margin: 0 0 10px 0;
-      padding-left: 16px;
+      margin: 0 0 12px 0;
+      padding-left: 20px;
     }
 
     .rules-content li {
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
 
     .rules-content strong {
@@ -162,12 +162,12 @@
     /* Bottom-Right Dynamic Rules Link */
     #rules-link {
       position: fixed;
-      bottom: 16px;
-      right: 16px;
+      bottom: 12px;
+      right: 12px;
       font-family: 'Press Start 2P', monospace;
-      font-size: 12px;
+      font-size: 11px;
       color: #ffd700;
-      background: rgba(18, 17, 24, 0.85);
+      background: rgba(18, 17, 24, 0.9);
       border: 3px solid #ffd700;
       box-shadow: 3px 3px 0px #000;
       padding: 10px 14px;
@@ -195,30 +195,30 @@
       background-size: 16px 16px;
       border: 4px solid #8c6f47;
       outline: 2px solid #000;
-      box-shadow: inset 0 0 12px #000, 5px 5px 0px #000;
-      padding: 12px 14px;
+      box-shadow: inset 0 0 12px #000, 4px 4px 0px #000;
+      padding: 8px 10px;
       transition: border-color 0.3s, box-shadow 0.3s;
     }
 
     .player-area.active {
       border-color: #ffd700;
-      box-shadow: inset 0 0 12px #000, 0 0 12px rgba(255, 215, 0, 0.4), 5px 5px 0px #000;
+      box-shadow: inset 0 0 12px #000, 0 0 10px rgba(255, 215, 0, 0.4), 4px 4px 0px #000;
     }
 
     .player-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
-      min-height: 40px;
+      margin-bottom: 6px;
+      min-height: 34px;
     }
 
     /* Attacker & Defender Badges */
     .role-badge {
-      font-size: 14px;
-      padding: 8px 14px;
+      font-size: 12px;
+      padding: 6px 10px;
       border: 3px solid #000;
-      box-shadow: 3px 3px 0px #000;
+      box-shadow: 2px 2px 0px #000;
       font-weight: bold;
       z-index: 10;
       transition: transform 1s ease-in-out, background-color 1s, color 1s, border-color 1s;
@@ -238,8 +238,8 @@
 
     /* Rank / HP Badge */
     .rank-hp-badge {
-      font-size: 12px;
-      padding: 8px 12px;
+      font-size: 11px;
+      padding: 6px 10px;
       background: #1a1612;
       color: #ffd700;
       border: 2px solid #8c6f47;
@@ -251,9 +251,9 @@
     .hand {
       display: flex;
       flex-wrap: nowrap;
-      gap: 8px;
-      min-height: 108px;
-      padding: 10px;
+      gap: 6px;
+      min-height: 98px;
+      padding: 6px;
       background: #15120e;
       border: 4px inset #000;
       align-items: center;
@@ -270,7 +270,7 @@
       align-items: center;
       overflow-x: hidden;
       overflow-y: visible;
-      padding: 14px 10px 10px 10px;
+      padding: 10px 6px 6px 6px;
       gap: 0;
     }
 
@@ -313,25 +313,25 @@
 
     /* Battlefield Card Slots */
     .battlefield-slot {
-      height: 124px; 
-      min-height: 124px;
-      max-height: 124px;
+      height: 112px; 
+      min-height: 112px;
+      max-height: 112px;
       flex-wrap: nowrap;
       overflow-x: auto;
       overflow-y: hidden;
       align-items: center;
       justify-content: flex-start;
       padding: 6px;
-      gap: 16px;
+      gap: 12px;
     }
 
     /* Standard Cards */
     .card {
-      width: 60px;
-      height: 84px;
+      width: 54px;
+      height: 76px;
       background: #f0e6d2;
       border: 3px solid #000;
-      box-shadow: 3px 3px 0px #000;
+      box-shadow: 2px 2px 0px #000;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -352,7 +352,7 @@
     }
 
     .card-value {
-      font-size: 26px;
+      font-size: 22px;
       font-weight: bold;
       line-height: 1;
     }
@@ -375,10 +375,10 @@
     }
 
     .wild-btn {
-      width: 32px;
-      height: 24px;
+      width: 38px;
+      height: 30px;
       padding: 0;
-      font-size: 10px;
+      font-size: 13px;
       background: #1a1612;
       color: #ffd700;
       border: 2px solid #8c6f47;
@@ -406,8 +406,8 @@
 
     /* Only Raise/Translate Cards That Are in Player Hands */
     .player-area .card.selected {
-      transform: translateY(-8px);
-      box-shadow: 4px 10px 0px #000;
+      transform: translateY(-6px);
+      box-shadow: 3px 8px 0px #000;
     }
 
     /* Retro 8-Bit White Strobe Effect */
@@ -432,38 +432,38 @@
       background: #1f1b16;
       border: 4px solid #6b5335;
       outline: 2px solid #000;
-      box-shadow: inset 0 0 10px #000, 5px 5px 0px #000;
-      padding: 12px 14px;
+      box-shadow: inset 0 0 10px #000, 4px 4px 0px #000;
+      padding: 8px 10px;
       text-align: center;
-      font-size: 11px;
+      font-size: 10px;
     }
 
     .arena-title {
       color: #c9a368;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       font-weight: bold;
-      font-size: 16px;
+      font-size: 14px;
       letter-spacing: 1px;
     }
 
     .cap-info {
       color: #ffd700;
-      font-size: 14px;
+      font-size: 12px;
       font-weight: bold;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
 
     .arena-flex {
       display: flex;
       justify-content: space-around;
-      gap: 12px;
+      gap: 8px;
     }
 
     /* Larger, Prominent Headers for Attack / Defense */
     .column-header {
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       font-weight: bold;
-      font-size: 15px;
+      font-size: 13px;
       letter-spacing: 1px;
     }
 
@@ -473,28 +473,28 @@
     /* Yellow and slightly larger font for total score numbers */
     .total-val {
       color: #ffd700;
-      font-size: 18px;
+      font-size: 16px;
       font-weight: bold;
       margin-left: 4px;
       text-shadow: 1px 1px 0px #000;
     }
 
     .controls {
-      margin-top: 12px;
+      margin-top: 8px;
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
     button {
       font-family: 'Press Start 2P', monospace;
-      font-size: 10px;
+      font-size: 11px;
       background: #4a3d2c;
       color: #ffffff;
       border: 3px solid #000;
       box-shadow: 3px 3px 0px #000;
-      padding: 10px 16px;
+      padding: 12px 14px;
       cursor: pointer;
     }
 
@@ -515,8 +515,8 @@
     }
 
     #undo-btn {
-      padding: 10px 12px;
-      font-size: 14px;
+      padding: 12px 14px;
+      font-size: 16px;
       background: #3a3225;
       color: #ffd700;
     }
@@ -537,7 +537,7 @@
       border-color: #000;
     }
 
-    /* Mobile Responsive Overrides */
+    /* Mobile Responsive Overrides - Ensuring Touch Targets and Near-Top Alignment */
     @media (max-width: 768px) {
       body {
         padding: 4px 6px;
@@ -545,28 +545,32 @@
       }
 
       h1 {
-        font-size: 22px;
-        margin: 2px 0 4px 0;
+        font-size: 20px;
+        margin: 2px 0 2px 0;
+      }
+
+      #game-container {
+        gap: 6px;
       }
 
       .rules-content {
-        font-size: 11px;
-        line-height: 1.6;
+        font-size: 13px;
+        line-height: 1.7;
       }
 
       .rules-title {
-        font-size: 14px;
+        font-size: 15px;
       }
 
       #rules-link {
-        font-size: 10px;
-        padding: 8px 10px;
+        font-size: 11px;
+        padding: 10px 12px;
         bottom: 8px;
         right: 8px;
       }
 
       .player-area {
-        padding: 8px;
+        padding: 6px 8px;
       }
 
       .role-badge, .rank-hp-badge {
@@ -575,23 +579,29 @@
       }
 
       .card {
-        width: 68px;
-        height: 96px;
+        width: 60px;
+        height: 84px;
       }
 
       .card-value {
-        font-size: 28px;
+        font-size: 24px;
+      }
+
+      .wild-btn {
+        width: 40px;
+        height: 34px;
+        font-size: 14px;
       }
 
       button {
-        font-size: 11px;
+        font-size: 12px;
         padding: 14px 16px;
-        min-height: 44px;
+        min-height: 48px;
       }
 
       #undo-btn {
-        font-size: 16px;
-        padding: 12px 14px;
+        font-size: 18px;
+        padding: 12px 16px;
       }
     }
   </style>
@@ -625,11 +635,11 @@
         </ul>
         <p><strong>SPECIAL RULES:</strong></p>
         <ul>
-          <li><strong>Aces (A):</strong> Are Wild (use arrows to adjust the number)</li>
+          <li><strong>Aces (A):</strong> Are Wild (use side arrows to adjust the number)</li>
           <li><strong>2 vs 10 Counter:</strong> A 2 directly blocks and nullifies an opposing 10.</li>
         </ul>
       </div>
-      <button onclick="toggleRules()" style="background:#ffd700; color:#000; margin-top:6px;">GOT IT</button>
+      <button onclick="toggleRules()" style="background:#ffd700; color:#000; margin-top:6px; width:100%;">GOT IT</button>
     </div>
   </div>
 
@@ -923,7 +933,7 @@
         cEl.className = `card ${card.suit} ${state.selectedCards.includes(card) ? 'selected' : ''}`;
         
         if (isLargeHand && count > 1) {
-          const overlap = `calc((100% - 60px) / ${count - 1} - 60px)`;
+          const overlap = `calc((100% - 54px) / ${count - 1} - 54px)`;
           cEl.style.marginRight = (index === count - 1) ? '0' : `min(0px, ${overlap})`;
         } else {
           cEl.style.marginRight = '';
