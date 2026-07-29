@@ -33,25 +33,25 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      padding: 6px 8px;
+      padding: 16px 12px;
     }
 
-    /* Main Layout Wrapper - Starts at the near-top */
+    /* Main Layout Wrapper */
     #game-container {
       width: 100%;
       max-width: 960px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
+      gap: 16px;
     }
 
-    /* Title - Phone Flexible sizing */
+    /* Title */
     h1 {
       color: #ffd700;
-      font-size: clamp(16px, 4vw, 24px);
-      text-shadow: 3px 3px 0px #000, -2px -2px 0px #3a2200;
-      margin: 2px 0 2px 0;
+      font-size: 28px;
+      text-shadow: 4px 4px 0px #000, -2px -2px 0px #3a2200;
+      margin: 4px 0 6px 0;
       letter-spacing: 2px;
       text-align: center;
     }
@@ -93,11 +93,11 @@
       text-shadow: 3px 3px 0px #000;
     }
 
-    /* Rules Modal Overlay - Phone Flexible & fully scrollable */
+    /* Rules Modal Overlay */
     #rules-overlay {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(0, 0, 0, 0.88);
+      background: rgba(0, 0, 0, 0.8);
       z-index: 200;
       display: flex;
       align-items: center;
@@ -105,8 +105,7 @@
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.2s ease-out;
-      padding: 10px;
-      overflow-y: auto;
+      padding: 16px;
     }
 
     #rules-overlay.show {
@@ -118,33 +117,29 @@
       width: 100%;
       max-width: 600px;
       background: #1b1712;
-      border: 5px solid #ffd700;
+      border: 6px solid #ffd700;
       outline: 2px solid #000;
-      box-shadow: 6px 6px 0px #000;
-      padding: clamp(10px, 3vw, 18px) clamp(12px, 3vw, 20px);
+      box-shadow: 8px 8px 0px #000;
+      padding: 24px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      max-height: 85vh;
+      gap: 14px;
+      max-height: 90vh;
       overflow-y: auto;
-      margin: auto;
     }
 
     .rules-title {
       color: #ffd700;
-      font-size: clamp(12px, 3.5vw, 15px);
+      font-size: 18px;
       text-align: center;
       text-shadow: 2px 2px 0px #000;
-      margin-bottom: 2px;
-      flex-shrink: 0;
+      margin-bottom: 4px;
     }
 
     .rules-content {
-      font-size: clamp(10px, 2.8vw, 13px);
-      line-height: 1.7;
-      color: #e2ded8;
-      overflow-y: auto;
-      padding-right: 4px;
+      font-size: 10px;
+      line-height: 1.8;
+      color: #d0d0d0;
     }
 
     .rules-content p {
@@ -153,7 +148,7 @@
 
     .rules-content ul {
       margin: 0 0 10px 0;
-      padding-left: 18px;
+      padding-left: 16px;
     }
 
     .rules-content li {
@@ -167,12 +162,12 @@
     /* Bottom-Right Dynamic Rules Link */
     #rules-link {
       position: fixed;
-      bottom: 10px;
-      right: 10px;
+      bottom: 16px;
+      right: 16px;
       font-family: 'Press Start 2P', monospace;
-      font-size: 10px;
+      font-size: 12px;
       color: #ffd700;
-      background: rgba(18, 17, 24, 0.9);
+      background: rgba(18, 17, 24, 0.85);
       border: 3px solid #ffd700;
       box-shadow: 3px 3px 0px #000;
       padding: 10px 14px;
@@ -192,38 +187,38 @@
       box-shadow: 1px 1px 0px #000;
     }
 
-    /* Scroll / Parchment Aesthetic for Player Areas - Original Compact Size Restored */
+    /* Scroll / Parchment Aesthetic for Player Areas */
     .player-area {
       width: 100%;
       background: #28231d;
       background-image: radial-gradient(#383026 15%, transparent 16%);
       background-size: 16px 16px;
-      border: 3px solid #8c6f47;
+      border: 4px solid #8c6f47;
       outline: 2px solid #000;
-      box-shadow: inset 0 0 10px #000, 3px 3px 0px #000;
-      padding: 4px 6px;
+      box-shadow: inset 0 0 12px #000, 5px 5px 0px #000;
+      padding: 12px 14px;
       transition: border-color 0.3s, box-shadow 0.3s;
     }
 
     .player-area.active {
       border-color: #ffd700;
-      box-shadow: inset 0 0 10px #000, 0 0 8px rgba(255, 215, 0, 0.4), 3px 3px 0px #000;
+      box-shadow: inset 0 0 12px #000, 0 0 12px rgba(255, 215, 0, 0.4), 5px 5px 0px #000;
     }
 
     .player-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 4px;
-      min-height: 28px;
+      margin-bottom: 10px;
+      min-height: 40px;
     }
 
     /* Attacker & Defender Badges */
     .role-badge {
-      font-size: 10px;
-      padding: 4px 8px;
-      border: 2px solid #000;
-      box-shadow: 2px 2px 0px #000;
+      font-size: 14px;
+      padding: 8px 14px;
+      border: 3px solid #000;
+      box-shadow: 3px 3px 0px #000;
       font-weight: bold;
       z-index: 10;
       transition: transform 1s ease-in-out, background-color 1s, color 1s, border-color 1s;
@@ -243,8 +238,8 @@
 
     /* Rank / HP Badge */
     .rank-hp-badge {
-      font-size: 10px;
-      padding: 4px 8px;
+      font-size: 12px;
+      padding: 8px 12px;
       background: #1a1612;
       color: #ffd700;
       border: 2px solid #8c6f47;
@@ -252,15 +247,15 @@
       font-weight: bold;
     }
 
-    /* Standard Hand Container - Original Compact sizing */
+    /* Standard Hand Container */
     .hand {
       display: flex;
       flex-wrap: nowrap;
-      gap: 4px;
-      min-height: 78px;
-      padding: 4px;
+      gap: 8px;
+      min-height: 108px;
+      padding: 10px;
       background: #15120e;
-      border: 3px inset #000;
+      border: 4px inset #000;
       align-items: center;
       justify-content: flex-start;
       overflow: hidden;
@@ -275,7 +270,7 @@
       align-items: center;
       overflow-x: hidden;
       overflow-y: visible;
-      padding: 6px 4px 4px 4px;
+      padding: 14px 10px 10px 10px;
       gap: 0;
     }
 
@@ -316,27 +311,27 @@
       animation: pixel-flame-burst 0.75s ease-in-out forwards;
     }
 
-    /* Battlefield Card Slots - Original Compact sizing */
+    /* Battlefield Card Slots */
     .battlefield-slot {
-      height: 90px; 
-      min-height: 90px;
-      max-height: 90px;
+      height: 124px; 
+      min-height: 124px;
+      max-height: 124px;
       flex-wrap: nowrap;
       overflow-x: auto;
       overflow-y: hidden;
       align-items: center;
       justify-content: flex-start;
-      padding: 4px;
-      gap: 10px;
+      padding: 6px;
+      gap: 16px;
     }
 
-    /* Standard Cards - Original Compact sizing */
+    /* Standard Cards */
     .card {
-      width: 46px;
-      height: 66px;
+      width: 60px;
+      height: 84px;
       background: #f0e6d2;
-      border: 2px solid #000;
-      box-shadow: 2px 2px 0px #000;
+      border: 3px solid #000;
+      box-shadow: 3px 3px 0px #000;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -357,7 +352,7 @@
     }
 
     .card-value {
-      font-size: 18px;
+      font-size: 26px;
       font-weight: bold;
       line-height: 1;
     }
@@ -376,14 +371,14 @@
     .wild-controls-side {
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 4px;
     }
 
     .wild-btn {
-      width: 36px;
-      height: 30px;
+      width: 32px;
+      height: 24px;
       padding: 0;
-      font-size: 13px;
+      font-size: 10px;
       background: #1a1612;
       color: #ffd700;
       border: 2px solid #8c6f47;
@@ -411,8 +406,8 @@
 
     /* Only Raise/Translate Cards That Are in Player Hands */
     .player-area .card.selected {
-      transform: translateY(-4px);
-      box-shadow: 2px 6px 0px #000;
+      transform: translateY(-8px);
+      box-shadow: 4px 10px 0px #000;
     }
 
     /* Retro 8-Bit White Strobe Effect */
@@ -431,44 +426,44 @@
       pointer-events: none;
     }
 
-    /* Battlefield Scroll Arena - Phone-flexible scaling */
+    /* Battlefield Scroll Arena */
     #arena {
       width: 100%;
       background: #1f1b16;
-      border: 3px solid #6b5335;
+      border: 4px solid #6b5335;
       outline: 2px solid #000;
-      box-shadow: inset 0 0 8px #000, 3px 3px 0px #000;
-      padding: clamp(6px, 2vw, 12px) clamp(8px, 2vw, 12px);
+      box-shadow: inset 0 0 10px #000, 5px 5px 0px #000;
+      padding: 12px 14px;
       text-align: center;
-      font-size: 10px;
+      font-size: 11px;
     }
 
     .arena-title {
       color: #c9a368;
-      margin-bottom: 2px;
+      margin-bottom: 6px;
       font-weight: bold;
-      font-size: clamp(10px, 3vw, 14px);
+      font-size: 16px;
       letter-spacing: 1px;
     }
 
     .cap-info {
       color: #ffd700;
-      font-size: clamp(10px, 2.8vw, 12px);
+      font-size: 14px;
       font-weight: bold;
-      margin-bottom: 6px;
+      margin-bottom: 12px;
     }
 
     .arena-flex {
       display: flex;
       justify-content: space-around;
-      gap: 6px;
+      gap: 12px;
     }
 
     /* Larger, Prominent Headers for Attack / Defense */
     .column-header {
-      margin-bottom: 4px;
+      margin-bottom: 8px;
       font-weight: bold;
-      font-size: clamp(9px, 2.8vw, 12px);
+      font-size: 15px;
       letter-spacing: 1px;
     }
 
@@ -478,29 +473,28 @@
     /* Yellow and slightly larger font for total score numbers */
     .total-val {
       color: #ffd700;
-      font-size: clamp(11px, 3.2vw, 15px);
+      font-size: 18px;
       font-weight: bold;
-      margin-left: 2px;
+      margin-left: 4px;
       text-shadow: 1px 1px 0px #000;
     }
 
     .controls {
-      margin-top: 6px;
+      margin-top: 12px;
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 6px;
-      flex-wrap: wrap;
+      gap: 10px;
     }
 
     button {
       font-family: 'Press Start 2P', monospace;
-      font-size: clamp(9px, 2.5vw, 11px);
+      font-size: 10px;
       background: #4a3d2c;
       color: #ffffff;
       border: 3px solid #000;
       box-shadow: 3px 3px 0px #000;
-      padding: clamp(10px, 2.5vw, 12px) clamp(10px, 3vw, 14px);
+      padding: 10px 16px;
       cursor: pointer;
     }
 
@@ -521,8 +515,8 @@
     }
 
     #undo-btn {
-      padding: clamp(10px, 2.5vw, 12px) clamp(10px, 3vw, 14px);
-      font-size: clamp(12px, 3.5vw, 16px);
+      padding: 10px 12px;
+      font-size: 14px;
       background: #3a3225;
       color: #ffd700;
     }
@@ -541,6 +535,64 @@
       background: #ffd700;
       color: #000;
       border-color: #000;
+    }
+
+    /* Mobile Responsive Overrides */
+    @media (max-width: 768px) {
+      body {
+        padding: 4px 6px;
+        justify-content: flex-start;
+      }
+
+      h1 {
+        font-size: 22px;
+        margin: 2px 0 4px 0;
+      }
+
+      .rules-content {
+        font-size: 11px;
+        line-height: 1.6;
+      }
+
+      .rules-title {
+        font-size: 14px;
+      }
+
+      #rules-link {
+        font-size: 10px;
+        padding: 8px 10px;
+        bottom: 8px;
+        right: 8px;
+      }
+
+      .player-area {
+        padding: 8px;
+      }
+
+      .role-badge, .rank-hp-badge {
+        font-size: 10px;
+        padding: 6px 8px;
+      }
+
+      .card {
+        width: 68px;
+        height: 96px;
+      }
+
+      .card-value {
+        font-size: 28px;
+      }
+
+      button {
+        font-size: 11px;
+        padding: 14px 16px;
+        min-height: 44px;
+      }
+
+      #undo-btn {
+        font-size: 16px;
+        padding: 12px 14px;
+      }
     }
   </style>
 </head>
@@ -573,11 +625,11 @@
         </ul>
         <p><strong>SPECIAL RULES:</strong></p>
         <ul>
-          <li><strong>Aces (A):</strong> Are Wild (use side arrows to adjust the number)</li>
+          <li><strong>Aces (A):</strong> Are Wild (use arrows to adjust the number)</li>
           <li><strong>2 vs 10 Counter:</strong> A 2 directly blocks and nullifies an opposing 10.</li>
         </ul>
       </div>
-      <button onclick="toggleRules()" style="background:#ffd700; color:#000; margin-top:4px; width:100%; min-height:44px;">GOT IT</button>
+      <button onclick="toggleRules()" style="background:#ffd700; color:#000; margin-top:6px;">GOT IT</button>
     </div>
   </div>
 
@@ -871,7 +923,7 @@
         cEl.className = `card ${card.suit} ${state.selectedCards.includes(card) ? 'selected' : ''}`;
         
         if (isLargeHand && count > 1) {
-          const overlap = `calc((100% - 46px) / ${count - 1} - 46px)`;
+          const overlap = `calc((100% - 60px) / ${count - 1} - 60px)`;
           cEl.style.marginRight = (index === count - 1) ? '0' : `min(0px, ${overlap})`;
         } else {
           cEl.style.marginRight = '';
