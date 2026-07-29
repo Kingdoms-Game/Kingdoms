@@ -141,24 +141,12 @@
       color: #d0d0d0;
     }
 
-    .rules-content p {
-      margin: 0 0 10px 0;
-    }
+    .rules-content p { margin: 0 0 10px 0; }
+    .rules-content ul { margin: 0 0 10px 0; padding-left: 16px; }
+    .rules-content li { margin-bottom: 6px; }
+    .rules-content strong { color: #ffd700; }
 
-    .rules-content ul {
-      margin: 0 0 10px 0;
-      padding-left: 16px;
-    }
-
-    .rules-content li {
-      margin-bottom: 6px;
-    }
-
-    .rules-content strong {
-      color: #ffd700;
-    }
-
-    /* Bottom-Right Dynamic Rules Link */
+    /* Rules Link */
     #rules-link {
       position: fixed;
       bottom: 16px;
@@ -176,17 +164,10 @@
       transition: background 0.15s, transform 0.15s;
     }
 
-    #rules-link:hover {
-      background: #2a2419;
-      transform: translateY(-2px);
-    }
+    #rules-link:hover { background: #2a2419; transform: translateY(-2px); }
+    #rules-link:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0px #000; }
 
-    #rules-link:active {
-      transform: translate(2px, 2px);
-      box-shadow: 1px 1px 0px #000;
-    }
-
-    /* Scroll / Parchment Aesthetic for Player Areas */
+    /* Player Area Parchment Aesthetic */
     .player-area {
       width: 100%;
       background: #28231d;
@@ -204,22 +185,25 @@
       box-shadow: inset 0 0 12px #000, 0 0 12px rgba(255, 215, 0, 0.4), 5px 5px 0px #000;
     }
 
+    /* Fixed Grid Header to prevent layout shifting */
     .player-header {
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
       align-items: center;
-      margin-bottom: 10px;
-      min-height: 40px;
+      margin-bottom: 12px;
+      min-height: 48px;
+      gap: 16px;
     }
 
     /* Attacker & Defender Badges */
     .role-badge {
       font-size: 14px;
-      padding: 8px 14px;
+      padding: 10px 14px;
       border: 3px solid #000;
       box-shadow: 3px 3px 0px #000;
       font-weight: bold;
       z-index: 10;
+      white-space: nowrap;
       transition: transform 1s ease-in-out, background-color 1s, color 1s, border-color 1s;
     }
 
@@ -235,15 +219,72 @@
       border-color: #4a90e2;
     }
 
-    /* Rank / HP Badge */
-    .rank-hp-badge {
-      font-size: 12px;
-      padding: 8px 12px;
-      background: #1a1612;
+    /* Locked Position Player Tag */
+    .player-tag {
+      font-size: 26px;
       color: #ffd700;
-      border: 2px solid #8c6f47;
-      box-shadow: 2px 2px 0px #000;
+      text-shadow: 3px 3px 0px #000, -2px -2px 0px #3a2200;
+      letter-spacing: 2px;
       font-weight: bold;
+      padding-left: 12px;
+    }
+
+    /* Original Prominent Royal Markers Container */
+    .royal-markers {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Restored Larger Royal Marker Design */
+    .royal-marker {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 12px;
+      min-height: 38px;
+      background: #15120e;
+      border: 3px solid #8c6f47;
+      color: #ffd700;
+      font-size: 10px;
+      font-weight: bold;
+      box-shadow: 3px 3px 0px #000;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      letter-spacing: 0.5px;
+    }
+
+    /* Destroyed Royal State */
+    .royal-marker.destroyed {
+      opacity: 0.2;
+      border-color: #444;
+      color: #555;
+      text-decoration: line-through;
+      box-shadow: none;
+    }
+
+    /* Pixel Flame Effect for King Marker in King Round */
+    @keyframes pixel-flame {
+      0% {
+        box-shadow: 0 -4px 0 #ff4500, -4px -6px 0 #ff8c00, 4px -6px 0 #ffd700, 3px 3px 0 #000;
+        background: #8b0000;
+      }
+      50% {
+        box-shadow: -2px -6px 0 #ff8c00, 2px -8px 0 #ff4500, -4px -4px 0 #ffd700, 3px 3px 0 #000;
+        background: #a30000;
+      }
+      100% {
+        box-shadow: 2px -4px 0 #ffd700, -2px -8px 0 #ff4500, 4px -6px 0 #ff8c00, 3px 3px 0 #000;
+        background: #8b0000;
+      }
+    }
+
+    .royal-marker.king.king-active {
+      transform: scale(1.1);
+      border-color: #ffd700;
+      color: #ffffff;
+      animation: pixel-flame 0.4s infinite alternate steps(2);
+      z-index: 15;
     }
 
     /* Standard Hand Container */
@@ -261,7 +302,6 @@
       transition: all 0.3s ease;
     }
 
-    /* Single-Row, Strict Contained Overlapping Hand */
     .hand.large-hand {
       display: flex;
       flex-wrap: nowrap;
@@ -273,37 +313,16 @@
       gap: 0;
     }
 
-    .hand.large-hand .card {
-      flex-shrink: 0;
-      position: relative;
-    }
-
+    .hand.large-hand .card { flex-shrink: 0; position: relative; }
     .hand.large-hand .card:hover,
-    .hand.large-hand .card.selected {
-      z-index: 10;
-    }
+    .hand.large-hand .card.selected { z-index: 10; }
 
-    /* Pixel-Flame Hand Transition Animation */
+    /* Pixel Flame Transition */
     @keyframes pixel-flame-burst {
-      0% {
-        box-shadow: inset 0 0 0px #ff4500, 0 0 0px #ffd700;
-        filter: brightness(1);
-      }
-      30% {
-        box-shadow: inset 0 0 25px #ff4500, 0 0 20px #ff4500;
-        filter: brightness(1.8);
-        background: #3d0a0a;
-      }
-      60% {
-        box-shadow: inset 0 0 35px #ffd700, 0 0 30px #ff8c00;
-        filter: brightness(2.2);
-        background: #521c00;
-      }
-      100% {
-        box-shadow: inset 0 0 0px #ff4500, 0 0 0px #ffd700;
-        filter: brightness(1);
-        background: #15120e;
-      }
+      0% { box-shadow: inset 0 0 0px #ff4500, 0 0 0px #ffd700; filter: brightness(1); }
+      30% { box-shadow: inset 0 0 25px #ff4500, 0 0 20px #ff4500; filter: brightness(1.8); background: #3d0a0a; }
+      60% { box-shadow: inset 0 0 35px #ffd700, 0 0 30px #ff8c00; filter: brightness(2.2); background: #521c00; }
+      100% { box-shadow: inset 0 0 0px #ff4500, 0 0 0px #ffd700; filter: brightness(1); background: #15120e; }
     }
 
     .hand.flame-transition {
@@ -312,104 +331,53 @@
 
     /* Battlefield Card Slots */
     .battlefield-slot {
-      height: 124px; 
-      min-height: 124px;
-      max-height: 124px;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      overflow-y: hidden;
-      align-items: center;
-      justify-content: flex-start;
-      padding: 6px;
-      gap: 16px;
+      height: 124px; min-height: 124px; max-height: 124px;
+      flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden;
+      align-items: center; justify-content: flex-start;
+      padding: 6px; gap: 16px;
     }
 
     /* Standard Cards */
     .card {
-      width: 60px;
-      height: 84px;
+      width: 60px; height: 84px;
       background: #f0e6d2;
       border: 3px solid #000;
       box-shadow: 3px 3px 0px #000;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      user-select: none;
-      flex-shrink: 0;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      cursor: pointer; user-select: none; flex-shrink: 0;
       transition: transform 0.15s ease-out, box-shadow 0.15s ease-out, background-color 0.15s ease-out;
     }
 
     .card-content-wrap {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      width: 100%; height: 100%;
     }
 
-    .card-value {
-      font-size: 26px;
-      font-weight: bold;
-      line-height: 1;
-    }
-
+    .card-value { font-size: 26px; font-weight: bold; line-height: 1; }
     .card.red .card-value { color: #b30000; }
     .card.black .card-value { color: #111111; }
 
-    /* Battlefield Card Container with Side-Mounted Up/Down Wild Selectors */
     .battlefield-card-container {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-shrink: 0;
+      display: flex; align-items: center; gap: 6px; flex-shrink: 0;
     }
 
-    .wild-controls-side {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
+    .wild-controls-side { display: flex; flex-direction: column; gap: 4px; }
 
     .wild-btn {
-      width: 32px;
-      height: 24px;
-      padding: 0;
-      font-size: 10px;
-      background: #1a1612;
-      color: #ffd700;
-      border: 2px solid #8c6f47;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 2px 2px 0px #000;
+      width: 32px; height: 24px; padding: 0; font-size: 10px;
+      background: #1a1612; color: #ffd700; border: 2px solid #8c6f47;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; box-shadow: 2px 2px 0px #000;
     }
 
-    .wild-btn:hover {
-      background: #2a2419;
-    }
+    .wild-btn:hover { background: #2a2419; }
+    .wild-btn:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0px #000; }
 
-    .wild-btn:active {
-      transform: translate(1px, 1px);
-      box-shadow: 1px 1px 0px #000;
-    }
+    .card.selected { background: #ffd700; border-color: #8b0000; }
+    .player-area .card.selected { transform: translateY(-8px); box-shadow: 4px 10px 0px #000; }
 
-    /* General Selected Styling (Color & Border) */
-    .card.selected {
-      background: #ffd700;
-      border-color: #8b0000;
-    }
-
-    /* Only Raise/Translate Cards That Are in Player Hands */
-    .player-area .card.selected {
-      transform: translateY(-8px);
-      box-shadow: 4px 10px 0px #000;
-    }
-
-    /* Retro 8-Bit White Strobe Effect */
     @keyframes pixel-blink {
       0% { transform: scale(1); filter: brightness(1); opacity: 1; }
       20% { transform: scale(1.06); background: #ffffff; filter: brightness(10) drop-shadow(0 0 10px #ffffff); opacity: 1; }
@@ -425,116 +393,36 @@
       pointer-events: none;
     }
 
-    /* Battlefield Scroll Arena */
     #arena {
-      width: 100%;
-      background: #1f1b16;
-      border: 4px solid #6b5335;
-      outline: 2px solid #000;
+      width: 100%; background: #1f1b16;
+      border: 4px solid #6b5335; outline: 2px solid #000;
       box-shadow: inset 0 0 10px #000, 5px 5px 0px #000;
-      padding: 12px 14px;
-      text-align: center;
-      font-size: 11px;
+      padding: 12px 14px; text-align: center; font-size: 11px;
     }
 
-    .arena-title {
-      color: #c9a368;
-      margin-bottom: 6px;
-      font-weight: bold;
-      font-size: 16px;
-      letter-spacing: 1px;
-    }
-
-    .cap-info {
-      color: #ffd700;
-      font-size: 14px;
-      font-weight: bold;
-      margin-bottom: 12px;
-    }
-
-    .arena-flex {
-      display: flex;
-      justify-content: space-around;
-      gap: 12px;
-    }
-
-    /* Larger, Prominent Headers for Attack / Defense */
-    .column-header {
-      margin-bottom: 8px;
-      font-weight: bold;
-      font-size: 15px;
-      letter-spacing: 1px;
-    }
-
+    .arena-title { color: #c9a368; margin-bottom: 6px; font-weight: bold; font-size: 16px; letter-spacing: 1px; }
+    .cap-info { color: #ffd700; font-size: 14px; font-weight: bold; margin-bottom: 12px; }
+    .arena-flex { display: flex; justify-content: space-around; gap: 12px; }
+    .column-header { margin-bottom: 8px; font-weight: bold; font-size: 15px; letter-spacing: 1px; }
     .column-header.atk { color: #ff4444; }
     .column-header.def { color: #4a90e2; }
-
-    /* Yellow and slightly larger font for total score numbers */
-    .total-val {
-      color: #ffd700;
-      font-size: 18px;
-      font-weight: bold;
-      margin-left: 4px;
-      text-shadow: 1px 1px 0px #000;
-    }
-
-    .controls {
-      margin-top: 12px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-    }
+    .total-val { color: #ffd700; font-size: 18px; font-weight: bold; margin-left: 4px; text-shadow: 1px 1px 0px #000; }
+    .controls { margin-top: 12px; display: flex; justify-content: center; align-items: center; gap: 10px; }
 
     button {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 10px;
-      background: #4a3d2c;
-      color: #ffffff;
-      border: 3px solid #000;
-      box-shadow: 3px 3px 0px #000;
-      padding: 10px 16px;
-      cursor: pointer;
+      font-family: 'Press Start 2P', monospace; font-size: 10px;
+      background: #4a3d2c; color: #ffffff; border: 3px solid #000;
+      box-shadow: 3px 3px 0px #000; padding: 10px 16px; cursor: pointer;
     }
 
-    button:hover {
-      background: #5c4d38;
-    }
+    button:hover { background: #5c4d38; }
+    button:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0px #000; }
+    button:disabled { background: #262018; color: #555; box-shadow: 3px 3px 0px #000; cursor: not-allowed; }
 
-    button:active {
-      transform: translate(2px, 2px);
-      box-shadow: 1px 1px 0px #000;
-    }
-
-    button:disabled {
-      background: #262018;
-      color: #555;
-      box-shadow: 3px 3px 0px #000;
-      cursor: not-allowed;
-    }
-
-    #undo-btn {
-      padding: 10px 12px;
-      font-size: 14px;
-      background: #3a3225;
-      color: #ffd700;
-    }
-
-    #pass-btn {
-      background: #8b0000;
-      color: #ffffff;
-    }
-
-    #pass-btn:hover {
-      background: #a30000;
-    }
-
-    #restart-btn {
-      margin-top: 14px;
-      background: #ffd700;
-      color: #000;
-      border-color: #000;
-    }
+    #undo-btn { padding: 10px 12px; font-size: 14px; background: #3a3225; color: #ffd700; }
+    #pass-btn { background: #8b0000; color: #ffffff; }
+    #pass-btn:hover { background: #a30000; }
+    #restart-btn { margin-top: 14px; background: #ffd700; color: #000; border-color: #000; }
   </style>
 </head>
 <body>
@@ -552,44 +440,46 @@
     <div class="rules-box" onclick="event.stopPropagation()">
       <div class="rules-title">📜 GAME RULES 📜</div>
       <div class="rules-content">
-        <p><strong>OBJECTIVE:</strong> Defeat your opponent through 3 escalating phases (Jack ➔ Queen ➔ King) by managing your hand and executing successful attacks.</p>
+        <p><strong>OBJECTIVE:</strong> Defeat your opponent through 3 escalating phases (Jack (1 hp) ➔ Queen (2 hp) ➔ KING (3 hp)) by managing your hand and executing successful attacks.</p>
         <p><strong>TURNS & COMBAT:</strong></p>
         <ul>
-          <li>Attacker plays cards into the battlefield first, adding up to a maximum of 10 (or 20 during "King Rounds.)</li>
-          <li>Defender responds by playing cards to match or beat the attack total. Overkill is -not- rewarded.</li>
-          <li>Select the card(s), which will appear in the battlefield, and then press submit to commit.</li>
+          <li>Attacker plays cards into the battlefield first.</li>
+          <li>Defender responds by playing cards to match or beat the attack total.</li>
         </ul>
         <p><strong>OUTCOMES:</strong></p>
         <ul>
-          <li><strong>Blocked:</strong> Defender's total matches or exceeds Attacker's total. Roles swap and play continues.</li>
-          <li><strong>Success:</strong> Attack exceeds defense and matches or exceeds the current-Royal's HP: Jack 1, Queen 2, King 3).</li>
+          <li><strong>Blocked / Attack Held:</strong> Defender's total &ge; Attack total. Roles swap and play continues.</li>
+          <li><strong>Success:</strong> Attack exceeds defense by the phase threshold (Jack: 1, Queen: 2, King: 3). Defender advances phase and loses 1 HP.</li>
           <li><strong>Forfeit:</strong> Defender can pass to concede the round.</li>
         </ul>
         <p><strong>SPECIAL RULES:</strong></p>
         <ul>
-          <li><strong>Aces (A):</strong> Are Wild (Can be adjusted to the chosen number when played).</li>
+          <li><strong>Aces (A):</strong> Are Wild (Count as 'A' initially, can be adjusted between A, 2, 3... up to 10).</li>
           <li><strong>2 vs 10 Counter:</strong> A 2 directly blocks and nullifies an opposing 10.</li>
-           <li><strong>King Rounds:</strong> When any King appears, players will use 18 cards with an attack maximum of 20.</li>
         </ul>
       </div>
       <button onclick="toggleRules()" style="background:#ffd700; color:#000; margin-top:6px;">GOT IT</button>
     </div>
   </div>
 
-  <!-- Bottom-Right Dynamic Rules Link -->
+  <!-- Dynamic Rules Link -->
   <button id="rules-link" onclick="toggleRules()">rules</button>
 
   <div id="game-container">
-    <!-- Title -->
     <h1>🏰 KINGDOMS 🏰</h1>
 
-    <!-- Player 2 (Black) -->
-    <div class="player-area" id="p2-area">
+    <!-- TOP ZONE: Player 1 (Red) -->
+    <div class="player-area" id="p1-area">
       <div class="player-header">
-        <div class="role-badge" id="p2-badge">🛡️ DEFENDER</div>
-        <div class="rank-hp-badge" id="p2-rank-badge">JACK (1 HP)</div>
+        <div class="role-badge" id="p1-badge">⚔️ ATTACKER</div>
+        <div class="player-tag">P1</div>
+        <div class="royal-markers">
+          <div class="royal-marker jack" id="p1-jack">Jack (1 hp)</div>
+          <div class="royal-marker queen" id="p1-queen">Queen (2 hp)</div>
+          <div class="royal-marker king" id="p1-king">KING (3 hp)</div>
+        </div>
       </div>
-      <div class="hand" id="p2-hand"></div>
+      <div class="hand" id="p1-hand"></div>
     </div>
 
     <!-- Arena -->
@@ -615,13 +505,18 @@
       </div>
     </div>
 
-    <!-- Player 1 (Red) -->
-    <div class="player-area" id="p1-area">
+    <!-- BOTTOM ZONE: Player 2 (Black) -->
+    <div class="player-area" id="p2-area">
       <div class="player-header">
-        <div class="role-badge" id="p1-badge">⚔️ ATTACKER</div>
-        <div class="rank-hp-badge" id="p1-rank-badge">JACK (1 HP)</div>
+        <div class="role-badge" id="p2-badge">🛡️ DEFENDER</div>
+        <div class="player-tag">P2</div>
+        <div class="royal-markers">
+          <div class="royal-marker jack" id="p2-jack">Jack (1 hp)</div>
+          <div class="royal-marker queen" id="p2-queen">Queen (2 hp)</div>
+          <div class="royal-marker king" id="p2-king">KING (3 hp)</div>
+        </div>
       </div>
-      <div class="hand" id="p1-hand"></div>
+      <div class="hand" id="p2-hand"></div>
     </div>
   </div>
 
@@ -636,17 +531,14 @@
       p1Hand: [],
       p2Hand: [],
       selectedCards: [],
-      stagedWildVals: {}, // Maps card.id -> current value ('A', 2, 3, ..., 10)
+      stagedWildVals: {},
       attackCards: [],
       defenseCards: [],
       hasTriggeredFlameTransition: false
     };
 
-    const hpMap = { 'Jack': 1, 'Queen': 2, 'King': 3 };
-
     function toggleRules() {
-      const modal = document.getElementById('rules-overlay');
-      modal.classList.toggle('show');
+      document.getElementById('rules-overlay').classList.toggle('show');
     }
 
     function shuffleArray(array) {
@@ -665,13 +557,7 @@
       }
       pool = shuffleArray(pool);
 
-      let deck = [];
-      if (!is18CardHand) {
-        deck = pool.slice(0, 9);
-      } else {
-        deck = pool;
-      }
-
+      let deck = is18CardHand ? pool : pool.slice(0, 9);
       deck.push({ id: Math.random(), val: 'A', suit: suit });
       return deck;
     }
@@ -697,12 +583,7 @@
         bannerTitle.style.color = color;
         banner.style.borderColor = color;
 
-        if (persistent) {
-          restartBtn.style.display = 'inline-block';
-        } else {
-          restartBtn.style.display = 'none';
-        }
-
+        restartBtn.style.display = persistent ? 'inline-block' : 'none';
         banner.classList.add('show');
 
         if (!persistent) {
@@ -723,10 +604,10 @@
 
         const p1Rect = p1Badge.getBoundingClientRect();
         const p2Rect = p2Badge.getBoundingClientRect();
-        const distance = p1Rect.top - p2Rect.top;
+        const distance = p2Rect.top - p1Rect.top;
 
-        p2Badge.style.transform = `translateY(${distance}px)`;
-        p1Badge.style.transform = `translateY(${-distance}px)`;
+        p1Badge.style.transform = `translateY(${distance}px)`;
+        p2Badge.style.transform = `translateY(${-distance}px)`;
 
         setTimeout(() => {
           p1Badge.style.transition = 'none';
@@ -786,14 +667,40 @@
       }, 750);
     }
 
+    function updateRoyalMarkers(player, currentPhase) {
+      const jack = document.getElementById(`${player}-jack`);
+      const queen = document.getElementById(`${player}-queen`);
+      const king = document.getElementById(`${player}-king`);
+
+      if (currentPhase === 'Jack') {
+        jack.classList.remove('destroyed');
+        queen.classList.remove('destroyed');
+        king.classList.remove('destroyed', 'king-active');
+      } else if (currentPhase === 'Queen') {
+        jack.classList.add('destroyed');
+        queen.classList.remove('destroyed');
+        king.classList.remove('destroyed', 'king-active');
+      } else if (currentPhase === 'King') {
+        jack.classList.add('destroyed');
+        queen.classList.add('destroyed');
+        king.classList.remove('destroyed');
+        king.classList.add('king-active');
+      } else if (currentPhase === 'Defeated') {
+        jack.classList.add('destroyed');
+        queen.classList.add('destroyed');
+        king.classList.add('destroyed');
+        king.classList.remove('king-active');
+      }
+    }
+
     function render() {
       const isKingPhaseActive = state.p1Phase === 'King' || state.p2Phase === 'King';
       
       renderHand('p1-hand', state.p1Hand, 'Red', isKingPhaseActive);
       renderHand('p2-hand', state.p2Hand, 'Black', isKingPhaseActive);
       
-      document.getElementById('p1-rank-badge').innerText = `${state.p1Phase.toUpperCase()} (${hpMap[state.p1Phase]} HP)`;
-      document.getElementById('p2-rank-badge').innerText = `${state.p2Phase.toUpperCase()} (${hpMap[state.p2Phase]} HP)`;
+      updateRoyalMarkers('p1', state.p1Phase);
+      updateRoyalMarkers('p2', state.p2Phase);
 
       document.getElementById('cap-info').innerText = `MAX: ${state.cap}`;
 
@@ -819,7 +726,7 @@
       const stagedSelected = state.selectedCards.map(card => {
         if (card.val === 'A') {
           if (state.stagedWildVals[card.id] === undefined) {
-            state.stagedWildVals[card.id] = 'A'; // Start as aesthetic 'A'
+            state.stagedWildVals[card.id] = 'A';
           }
           return { card: card, wildVal: state.stagedWildVals[card.id] };
         } else {
@@ -914,7 +821,6 @@
         cEl.appendChild(wrapEl);
         container.appendChild(cEl);
 
-        // If Ace, attach side-mounted larger up/down buttons
         if (item.card.val === 'A') {
           const controls = document.createElement('div');
           controls.className = 'wild-controls-side';
@@ -924,7 +830,6 @@
           upBtn.innerHTML = '▲';
           upBtn.onclick = (e) => {
             e.stopPropagation();
-            // Sequence: 'A' -> 2 -> 3 -> ... -> 10 (capped at 10)
             if (item.wildVal === 'A') {
               item.wildVal = 2;
             } else if (item.wildVal < 10) {
@@ -941,7 +846,6 @@
           downBtn.innerHTML = '▼';
           downBtn.onclick = (e) => {
             e.stopPropagation();
-            // Sequence: 10 -> 9 -> ... -> 2 -> 'A' (lowest aesthetic option)
             if (item.wildVal === 2) {
               item.wildVal = 'A';
             } else if (item.wildVal > 2 && item.wildVal <= 10) {
@@ -966,14 +870,10 @@
       const idx = state.selectedCards.indexOf(card);
       if (idx > -1) {
         state.selectedCards.splice(idx, 1);
-        if (card.val === 'A') {
-          delete state.stagedWildVals[card.id];
-        }
+        if (card.val === 'A') delete state.stagedWildVals[card.id];
       } else {
         state.selectedCards.push(card);
-        if (card.val === 'A') {
-          state.stagedWildVals[card.id] = 'A'; // Start as aesthetic 'A'
-        }
+        if (card.val === 'A') state.stagedWildVals[card.id] = 'A';
       }
       render();
     }
@@ -986,7 +886,6 @@
 
     function calcTotal(ownItems, opposingItems = []) {
       let total = 0;
-
       let ownTensCount = ownItems.filter(i => i.card.val === 10 || (i.card.val === 'A' && i.wildVal === 10)).length;
       let opposingTwosCount = opposingItems.filter(i => i.card.val === 2).length;
 
@@ -996,22 +895,13 @@
         if (item.card.val === 'A') {
           if (item.wildVal !== 'A') {
             if (item.wildVal === 10) {
-              if (blockedTens > 0) {
-                blockedTens--;
-              } else {
-                total += 10;
-              }
+              if (blockedTens > 0) blockedTens--; else total += 10;
             } else {
               total += item.wildVal;
             }
           }
-          // If wildVal is still aesthetic 'A', it contributes 0 value
         } else if (item.card.val === 10) {
-          if (blockedTens > 0) {
-            blockedTens--; 
-          } else {
-            total += 10;
-          }
+          if (blockedTens > 0) blockedTens--; else total += 10;
         } else {
           total += item.card.val;
         }
@@ -1046,16 +936,12 @@
       const atkTotal = calcTotal(currentAttack, currentDefense);
       const defTotal = calcTotal(currentDefense, currentAttack);
 
-      if (state.cap === 10) {
-        if (atkTotal > 10 || defTotal > 10) {
-          await showBannerPromise("⚠️ EXCEEDS MAX OF 10", "#ff4444", 1500);
-          return;
-        }
-      } else if (state.cap === 20) {
-        if (atkTotal > 20 || defTotal > 20) {
-          await showBannerPromise("⚠️ EXCEEDS MAX OF 20", "#ff4444", 1500);
-          return;
-        }
+      if (state.cap === 10 && (atkTotal > 10 || defTotal > 10)) {
+        await showBannerPromise("⚠️ EXCEEDS MAX OF 10", "#ff4444", 1500);
+        return;
+      } else if (state.cap === 20 && (atkTotal > 20 || defTotal > 20)) {
+        await showBannerPromise("⚠️ EXCEEDS MAX OF 20", "#ff4444", 1500);
+        return;
       }
 
       if (state.turn === state.attacker) {
@@ -1090,7 +976,6 @@
         await showBannerPromise("🛡️ BLOCKED!", "#4a90e2", 1200);
         await clearBattlefieldWithBlink();
         await animateLabelSwapPromise();
-        
         state.turn = state.attacker;
         render();
       } else {
@@ -1126,7 +1011,7 @@
         else if (state.p1Phase === 'King') defeated = true;
       } else {
         if (state.p2Phase === 'Jack') state.p2Phase = 'Queen';
-        else if (state.p2Phase === 'Queen') state.p2Phase === 'King';
+        else if (state.p2Phase === 'Queen') state.p2Phase = 'King';
         else if (state.p2Phase === 'King') defeated = true;
       }
 
