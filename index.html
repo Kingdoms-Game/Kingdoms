@@ -495,7 +495,6 @@
   <button id="rules-link" onclick="toggleRules()">rules</button>
 
   <div id="game-container">
-    <!-- RESTORED TITLE HERE -->
     <h1>🏰 KINGDOMS 🏰</h1>
 
     <!-- TOP ZONE: Player 1 (Red) -->
@@ -860,7 +859,7 @@
           upBtn.innerHTML = '▲';
           upBtn.onclick = (e) => {
             e.stopPropagation();
-            if (item.wildVal === 'A') {
+            if (item.wildVal === 'A' || item.wildVal === 1) {
               item.wildVal = 2;
             } else if (item.wildVal < 10) {
               item.wildVal++;
@@ -877,8 +876,8 @@
           downBtn.onclick = (e) => {
             e.stopPropagation();
             if (item.wildVal === 2) {
-              item.wildVal = 'A';
-            } else if (item.wildVal > 2 && item.wildVal <= 10) {
+              item.wildVal = 1;
+            } else if (item.wildVal > 1) {
               item.wildVal--;
             }
             if (state.stagedWildVals[item.card.id] !== undefined) {
@@ -916,24 +915,28 @@
 
     function calcTotal(ownItems, opposingItems = []) {
       let total = 0;
-      let ownTensCount = ownItems.filter(i => i.card.val === 10 || (i.card.val === 'A' && i.wildVal === 10)).length;
-      let opposingTwosCount = opposingItems.filter(i => i.card.val === 2).length;
+      let ownTensCount = 0;
 
+      ownItems.forEach(item => {
+        if (item.card.val === 10 || (item.card.val === 'A' && item.wildVal === 10)) {
+          ownTensCount++;
+        }
+      });
+
+      let opposingTwosCount = opposingItems.filter(i => i.card.val === 2).length;
       let blockedTens = Math.min(ownTensCount, opposingTwosCount);
 
       ownItems.forEach(item => {
+        let numericValue = item.card.val;
+
         if (item.card.val === 'A') {
-          if (item.wildVal !== 'A') {
-            if (item.wildVal === 10) {
-              if (blockedTens > 0) blockedTens--; else total += 10;
-            } else {
-              total += item.wildVal;
-            }
-          }
-        } else if (item.card.val === 10) {
+          numericValue = (item.wildVal === 'A' || item.wildVal === undefined) ? 1 : Number(item.wildVal);
+        }
+
+        if (numericValue === 10) {
           if (blockedTens > 0) blockedTens--; else total += 10;
         } else {
-          total += item.card.val;
+          total += numericValue;
         }
       });
 
@@ -943,19 +946,36 @@
     async function submitPlay() {
       if (state.selectedCards.length === 0) return;
 
-      const stagedItems = state.selectedCards.map(card => ({
-        card: card,
-        wildVal: card.val === 'A' ? state.stagedWildVals[card.id] : null
-      }));
-
-      const hasUnchosenAce = stagedItems.some(item => item.card.val === 'A' && item.wildVal === 'A');
-      if (hasUnchosenAce) {
-        await showBannerPromise("⚠️ PLEASE SELECT A CARD VALUE", "#ff4444", 1500);
-        return;
-      }
-
+      // Smart Ace Auto-Resolution Fix
       let currentAttack = [...state.attackCards];
       let currentDefense = [...state.defenseCards];
+      const isDefending = state.turn !== state.attacker;
+      const targetAtk = isDefending ? calcTotal(currentAttack, currentDefense) : 0;
+
+      const stagedItems = state.selectedCards.map(card => {
+        let chosenVal = state.stagedWildVals[card.id];
+        
+        if (card.val === 'A' && (chosenVal === 'A' || chosenVal === undefined)) {
+          // If defending, calculate if Ace as 10 completes a valid block without busting MAX cap
+          if (isDefending) {
+            let tempDefWithoutAce = calcTotal([...currentDefense, ...state.selectedCards.filter(c => c !== card).map(c => ({ card: c, wildVal: state.stagedWildVals[c.id] === 'A' ? 1 : state.stagedWildVals[c.id] }))]);
+            if (tempDefWithoutAce + 10 <= state.cap && tempDefWithoutAce + 10 >= targetAtk) {
+              chosenVal = 10;
+            } else {
+              chosenVal = 1;
+            }
+          } else {
+            // Default attacker Ace to 10 if allowed under cap, otherwise 1
+            let tempAtkWithoutAce = calcTotal([...currentAttack, ...state.selectedCards.filter(c => c !== card).map(c => ({ card: c, wildVal: state.stagedWildVals[c.id] === 'A' ? 1 : state.stagedWildVals[c.id] }))]);
+            chosenVal = (tempAtkWithoutAce + 10 <= state.cap) ? 10 : 1;
+          }
+        }
+
+        return {
+          card: card,
+          wildVal: card.val === 'A' ? chosenVal : null
+        };
+      });
 
       if (state.turn === state.attacker) {
         currentAttack = [...currentAttack, ...stagedItems];
