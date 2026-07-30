@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KINGDOMS</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
@@ -12,9 +13,12 @@
     
     html, body {
       height: 100vh;
+      height: 100dvh;
+      width: 100vw;
       margin: 0;
       padding: 0;
-      overflow: hidden; /* Prevents vertical scrollbar */
+      overflow: hidden; /* Hard locks overall scrolling */
+      touch-action: none;
     }
 
     body {
@@ -34,6 +38,7 @@
       align-items: center;
       justify-content: center;
       padding: 12px 16px;
+      box-sizing: border-box;
     }
 
     /* Main Layout Wrapper */
@@ -230,14 +235,13 @@
       padding-left: 12px;
     }
 
-    /* Original Prominent Royal Markers Container */
+    /* Royal Markers Container */
     .royal-markers {
       display: flex;
       align-items: center;
       gap: 10px;
     }
 
-    /* Restored Larger Royal Marker Design */
     .royal-marker {
       display: flex;
       align-items: center;
@@ -371,7 +375,7 @@
       background: #1a1612; color: #ffd700; border: 2px solid #8c6f47;
       display: flex; align-items: center; justify-content: center;
       cursor: pointer; box-shadow: 2px 2px 0px #000;
-      min-width: unset; /* Override default button min-width */
+      min-width: unset;
     }
 
     .wild-btn:hover { background: #2a2419; }
@@ -488,6 +492,7 @@
   <button id="rules-link" onclick="toggleRules()">rules</button>
 
   <div id="game-container">
+    <!-- RESTORED TITLE HERE -->
     <h1>🏰 KINGDOMS 🏰</h1>
 
     <!-- TOP ZONE: Player 1 (Red) -->
