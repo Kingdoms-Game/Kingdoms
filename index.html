@@ -305,12 +305,12 @@
       width: 100%;
     }
 
-    /* Bare Scroll Arrows */
+    /* Interactive Bare Scroll Arrows */
     .scroll-arrow {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 22px;
+      font-size: 24px;
       font-family: 'Press Start 2P', monospace;
       color: #ffd700;
       background: transparent;
@@ -318,18 +318,22 @@
       box-shadow: none;
       padding: 0;
       pointer-events: none;
-      z-index: 20;
+      z-index: 25;
       opacity: 0;
-      transition: opacity 0.2s ease;
+      transition: opacity 0.2s ease, transform 0.1s ease;
       text-shadow: 2px 2px 0px #000, -2px -2px 0px #000, 2px -2px 0px #000, -2px 2px 0px #000;
       line-height: 1;
+      cursor: pointer;
+      user-select: none;
     }
 
-    .scroll-arrow.left { left: 8px; }
-    .scroll-arrow.right { right: 8px; }
-    .scroll-arrow.visible { opacity: 0.85; }
+    .scroll-arrow.left { left: 6px; }
+    .scroll-arrow.right { right: 6px; }
+    .scroll-arrow.visible { opacity: 0.85; pointer-events: auto; }
+    .scroll-arrow.visible:hover { opacity: 1; transform: translateY(-50%) scale(1.15); }
+    .scroll-arrow.visible:active { transform: translateY(-50%) scale(0.95); }
 
-    /* Standard Hand Container with Side-Scrolling */
+    /* Standard Hand Container with Side-Scrolling & Mouse Grab Support */
     .hand {
       display: flex;
       flex-wrap: nowrap;
@@ -345,7 +349,10 @@
       transition: all 0.3s ease;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none; /* Hide scrollbars for clean pixel art */
+      cursor: grab;
+      user-select: none;
     }
+    .hand:active { cursor: grabbing; }
     .hand::-webkit-scrollbar { display: none; }
 
     .hand.large-hand {
@@ -696,9 +703,9 @@
         </div>
       </div>
       <div class="hand-wrapper">
-        <div class="scroll-arrow left" id="p1-arr-left">‹</div>
+        <div class="scroll-arrow left" id="p1-arr-left" onclick="scrollHand('p1-hand', -120)">‹</div>
         <div class="hand" id="p1-hand" onscroll="checkScrollArrows('p1-hand', 'p1-arr-left', 'p1-arr-right')"></div>
-        <div class="scroll-arrow right" id="p1-arr-right">›</div>
+        <div class="scroll-arrow right" id="p1-arr-right" onclick="scrollHand('p1-hand', 120)">›</div>
       </div>
     </div>
 
@@ -710,17 +717,17 @@
         <div style="flex: 1; min-width: 0;">
           <div class="column-header atk">ATTACK: <span id="attack-total" class="total-val">0</span></div>
           <div class="hand-wrapper">
-            <div class="scroll-arrow left" id="atk-arr-left">‹</div>
+            <div class="scroll-arrow left" id="atk-arr-left" onclick="scrollHand('attack-cards', -120)">‹</div>
             <div id="attack-cards" class="hand battlefield-slot" onscroll="checkScrollArrows('attack-cards', 'atk-arr-left', 'atk-arr-right')"></div>
-            <div class="scroll-arrow right" id="atk-arr-right">›</div>
+            <div class="scroll-arrow right" id="atk-arr-right" onclick="scrollHand('attack-cards', 120)">›</div>
           </div>
         </div>
         <div style="flex: 1; min-width: 0;">
           <div class="column-header def">DEFENSE: <span id="defense-total" class="total-val">0</span></div>
           <div class="hand-wrapper">
-            <div class="scroll-arrow left" id="def-arr-left">‹</div>
+            <div class="scroll-arrow left" id="def-arr-left" onclick="scrollHand('defense-cards', -120)">‹</div>
             <div id="defense-cards" class="hand battlefield-slot" onscroll="checkScrollArrows('defense-cards', 'def-arr-left', 'def-arr-right')"></div>
-            <div class="scroll-arrow right" id="def-arr-right">›</div>
+            <div class="scroll-arrow right" id="def-arr-right" onclick="scrollHand('defense-cards', 120)">›</div>
           </div>
         </div>
       </div>
@@ -750,9 +757,9 @@
         </div>
       </div>
       <div class="hand-wrapper">
-        <div class="scroll-arrow left" id="p2-arr-left">‹</div>
+        <div class="scroll-arrow left" id="p2-arr-left" onclick="scrollHand('p2-hand', -120)">‹</div>
         <div class="hand" id="p2-hand" onscroll="checkScrollArrows('p2-hand', 'p2-arr-left', 'p2-arr-right')"></div>
-        <div class="scroll-arrow right" id="p2-arr-right">›</div>
+        <div class="scroll-arrow right" id="p2-arr-right" onclick="scrollHand('p2-hand', 120)">›</div>
       </div>
     </div>
   </div>
@@ -773,6 +780,13 @@
       defenseCards: [],
       hasTriggeredFlameTransition: false
     };
+
+    function scrollHand(containerId, distance) {
+      const container = document.getElementById(containerId);
+      if (container) {
+        container.scrollBy({ left: distance, behavior: 'smooth' });
+      }
+    }
 
     function checkScrollArrows(containerId, leftArrId, rightArrId) {
       const container = document.getElementById(containerId);
@@ -795,6 +809,46 @@
         checkScrollArrows('attack-cards', 'atk-arr-left', 'atk-arr-right');
         checkScrollArrows('defense-cards', 'def-arr-left', 'def-arr-right');
       }, 50);
+    }
+
+    /* Enables Click-and-Drag PC Scroll on overflow containers */
+    function setupDragToScroll(el) {
+      let isDown = false;
+      let startX, scrollLeft, startY;
+      let hasDragged = false;
+
+      el.addEventListener('mousedown', (e) => {
+        isDown = true;
+        hasDragged = false;
+        startX = e.pageX - el.offsetLeft;
+        startY = e.pageY - el.offsetTop;
+        scrollLeft = el.scrollLeft;
+      });
+
+      el.addEventListener('mouseleave', () => { isDown = false; });
+      el.addEventListener('mouseup', () => { isDown = false; });
+
+      el.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        const x = e.pageX - el.offsetLeft;
+        const y = e.pageY - el.offsetTop;
+        const walkX = (x - startX) * 1.5;
+        const walkY = (y - startY);
+
+        if (Math.abs(x - startX) > 5) {
+          hasDragged = true;
+          e.preventDefault();
+          el.scrollLeft = scrollLeft - walkX;
+        }
+      });
+
+      /* Prevent triggering card clicks if the user was just dragging */
+      el.addEventListener('click', (e) => {
+        if (hasDragged) {
+          e.stopPropagation();
+          e.preventDefault();
+        }
+      }, true);
     }
 
     function toggleRules() {
@@ -830,6 +884,12 @@
       state.defenseCards = [];
       state.selectedCards = [];
       state.stagedWildVals = {};
+
+      ['p1-hand', 'p2-hand', 'attack-cards', 'defense-cards'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) setupDragToScroll(el);
+      });
+
       render();
     }
 
