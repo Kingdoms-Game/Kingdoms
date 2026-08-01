@@ -3,21 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kingdoms Card Game</title>
+  <title>Kingdoms</title>
   <style>
-    :root {
-      --bg-color: #0f172a;
-      --panel-bg: #1e293b;
-      --accent-color: #38bdf8;
-      --accent-hover: #0284c7;
-      --danger-color: #ef4444;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --card-bg: #ffffff;
-      --card-text: #0f172a;
-      --border-radius: 8px;
-    }
-
     * {
       box-sizing: border-box;
       margin: 0;
@@ -26,311 +13,303 @@
     }
 
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      min-height: 100vh;
+      background-color: #121212;
+      color: #e0e0e0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      overflow-x: hidden;
-      padding: 12px;
+      align-items: center;
+      min-height: 100vh;
+      padding: 10px;
     }
 
-    /* Outer Wrapper & Layout Hierarchy */
-    #game-layout {
-      max-width: 600px;
-      margin: 0 auto;
+    #game-container {
       width: 100%;
+      max-width: 480px;
       display: flex;
       flex-direction: column;
       gap: 12px;
-      flex-grow: 1;
     }
 
-    /* Header & Turn Summary */
-    header {
-      text-align: center;
-      padding: 8px;
-      background: var(--panel-bg);
-      border-radius: var(--border-radius);
+    /* Header & Phase Bar */
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #1e1e1e;
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1px solid #2a2a2a;
     }
 
-    header h1 {
-      font-size: 1.4rem;
-      color: var(--accent-color);
+    .game-title {
+      font-weight: 700;
+      font-size: 1.1rem;
       letter-spacing: 1px;
+      color: #ffffff;
     }
 
-    .turn-indicator {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      margin-top: 2px;
+    .phase-badge {
+      font-size: 0.8rem;
+      background: #333;
+      color: #ffca28;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      font-weight: 600;
     }
 
-    /* Player 2 Area (Shifted Up) */
-    #p2-area {
-      background: var(--panel-bg);
-      padding: 12px;
-      border-radius: var(--border-radius);
+    /* Player Status Panels */
+    .player-panel {
+      background: #1e1e1e;
+      border-radius: 8px;
+      padding: 10px;
+      border: 1px solid #2a2a2a;
       display: flex;
       flex-direction: column;
       gap: 8px;
     }
 
-    /* Card Areas & Scroll Arrows without Boxes */
-    .card-strip-container {
+    .player-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .hp-display {
+      color: #4caf50;
+      font-weight: 700;
+    }
+
+    /* Card Strip Container & Scroll Arrows (No Boxes) */
+    .card-strip-wrapper {
       position: relative;
       display: flex;
       align-items: center;
       width: 100%;
     }
 
-    .card-strip {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      scroll-behavior: smooth;
-      padding: 6px 2px;
-      width: 100%;
-      scrollbar-width: none; /* Firefox */
-    }
-
-    .card-strip::-webkit-scrollbar {
-      display: none; /* Chrome / Safari */
-    }
-
-    /* Scroll Arrows: Borderless, extends directly to screen edge */
     .scroll-arrow {
-      background: transparent;
+      background: none;
       border: none;
-      color: var(--accent-color);
-      font-size: 1.8rem;
+      color: #888;
+      font-size: 1.5rem;
       cursor: pointer;
-      padding: 0;
+      padding: 0 4px;
       line-height: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 5;
-      transition: opacity 0.2s, transform 0.1s;
+      z-index: 2;
+      transition: color 0.15s ease;
     }
 
     .scroll-arrow:hover {
-      color: #7dd3fc;
+      color: #fff;
     }
 
     .scroll-arrow.left {
-      margin-right: 4px;
+      margin-right: -2px;
     }
 
     .scroll-arrow.right {
-      margin-left: 4px;
+      margin-left: -2px;
+    }
+
+    .card-strip {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding: 4px 0;
+      width: 100%;
+      scrollbar-width: none;
+    }
+
+    .card-strip::-webkit-scrollbar {
+      display: none;
     }
 
     /* Cards */
     .card {
-      min-width: 54px;
-      height: 76px;
-      background-color: var(--card-bg);
-      color: var(--card-text);
-      border-radius: 6px;
+      min-width: 50px;
+      height: 72px;
+      background: #fff;
+      color: #111;
+      border-radius: 5px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 4px 6px;
-      font-weight: bold;
-      font-size: 0.9rem;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      padding: 4px 5px;
+      font-weight: 700;
+      font-size: 0.85rem;
       cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.4);
       transition: transform 0.15s ease, box-shadow 0.15s ease;
       flex-shrink: 0;
     }
 
     .card.red {
-      color: #dc2626;
+      color: #d32f2f;
     }
 
     .card.selected {
-      transform: translateY(-8px);
-      box-shadow: 0 0 0 3px var(--accent-color);
+      transform: translateY(-6px);
+      box-shadow: 0 0 0 2px #ffca28, 0 4px 8px rgba(0,0,0,0.6);
     }
 
-    .card-value-box {
+    .card-rank {
+      line-height: 1;
+    }
+
+    .card-suit {
       font-size: 0.75rem;
-      background: #e2e8f0;
-      padding: 1px 3px;
-      border-radius: 3px;
-      text-align: center;
     }
 
-    /* Stats Displays */
-    .stats-bar {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    /* Center Playfield / Resolution Area */
-    #battlefield {
-      background: rgba(30, 41, 59, 0.5);
-      border: 1px dashed #334155;
-      border-radius: var(--border-radius);
+    /* Resolution Field & Royals Display */
+    #playfield {
+      background: #181818;
+      border: 1px dashed #333;
+      border-radius: 8px;
       padding: 12px;
-      min-height: 100px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      gap: 10px;
+    }
+
+    .royals-container {
+      display: flex;
       gap: 8px;
     }
 
-    .royals-box-container {
-      display: flex;
-      gap: 12px;
-    }
-
-    /* Royal Cards Display: J1 Q2 K3 in little boxes, no parentheses */
-    .royal-box {
-      background: var(--panel-bg);
-      border: 1px solid var(--accent-color);
-      color: var(--accent-color);
-      padding: 4px 10px;
+    /* Bare J1 Q2 K3 boxes with no parentheses */
+    .royal-card-box {
+      background: #252525;
+      border: 1px solid #444;
+      color: #ffca28;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 4px 8px;
       border-radius: 4px;
-      font-weight: bold;
-      font-size: 0.85rem;
       letter-spacing: 0.5px;
     }
 
-    /* Player 1 Area */
-    #p1-area {
-      background: var(--panel-bg);
-      padding: 12px;
-      border-radius: var(--border-radius);
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+    .log-message {
+      font-size: 0.8rem;
+      color: #aaa;
+      text-align: center;
+      min-height: 1.2em;
     }
 
-    /* Controls & Buttons */
-    .controls-row {
+    /* Action Controls */
+    .controls-group {
       display: flex;
       gap: 8px;
-      margin-top: 4px;
+      width: 100%;
     }
 
-    /* Submit Button with Stacked Text */
+    /* Enriched Submit Button: Large title top, small sub-label bottom */
     .btn-submit {
-      flex: 2;
-      background: var(--accent-color);
-      color: #0f172a;
+      flex: 3;
+      background: #2e7d32;
+      color: #ffffff;
       border: none;
-      border-radius: var(--border-radius);
-      padding: 10px 14px;
+      border-radius: 6px;
+      padding: 8px 12px;
       cursor: pointer;
-      font-weight: bold;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      transition: background 0.2s ease;
+      transition: background 0.15s ease;
     }
 
     .btn-submit:hover {
-      background: var(--accent-hover);
+      background: #388e3c;
     }
 
-    .btn-submit .main-label {
-      font-size: 1rem;
+    .btn-submit .primary-text {
+      font-size: 0.95rem;
+      font-weight: 700;
       line-height: 1.1;
     }
 
-    .btn-submit .sub-label {
-      font-size: 0.72rem;
-      opacity: 0.8;
-      margin-top: 3px;
-      font-weight: normal;
+    .btn-submit .secondary-text {
+      font-size: 0.7rem;
+      opacity: 0.85;
+      margin-top: 2px;
+      font-weight: 500;
     }
 
-    /* Forfeit Button */
     .btn-forfeit {
       flex: 1;
-      background: transparent;
-      color: var(--danger-color);
-      border: 1px solid var(--danger-color);
-      border-radius: var(--border-radius);
-      padding: 10px 14px;
-      font-weight: bold;
-      font-size: 0.95rem;
+      background: #252525;
+      color: #ef5350;
+      border: 1px solid #ef5350;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.85rem;
       cursor: pointer;
-      transition: background 0.2s ease, color 0.2s ease;
+      transition: background 0.15s ease, color 0.15s ease;
     }
 
     .btn-forfeit:hover {
-      background: var(--danger-color);
+      background: #ef5350;
       color: #ffffff;
-    }
-
-    #log {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      text-align: center;
-      min-height: 18px;
     }
   </style>
 </head>
 <body>
 
-  <div id="game-layout">
+  <div id="game-container">
     
-    <header>
-      <h1>KINGDOMS</h1>
-      <div class="turn-indicator" id="turn-indicator">Player 1's Turn (Attack Phase)</div>
-    </header>
+    <!-- Top Bar -->
+    <div class="header-bar">
+      <span class="game-title">KINGDOMS</span>
+      <span class="phase-badge" id="phase-badge">Phase 1: Attack</span>
+    </div>
 
-    <!-- Player 2 Area (Shifted up to occupy freed space) -->
-    <div id="p2-area">
-      <div class="stats-bar">
+    <!-- Player 2 Area (Shifted up directly under header) -->
+    <div class="player-panel" id="p2-panel">
+      <div class="player-info">
         <span>Player 2 (Opponent)</span>
-        <span id="p2-hp">HP: 20</span>
+        <span class="hp-display" id="p2-hp">20 HP</span>
       </div>
-
-      <div class="card-strip-container">
-        <button class="scroll-arrow left" onclick="scrollStrip('p2-hand', -100)">&#10094;</button>
+      <div class="card-strip-wrapper">
+        <button class="scroll-arrow left" onclick="scrollStrip('p2-hand', -90)">&#10094;</button>
         <div class="card-strip" id="p2-hand"></div>
-        <button class="scroll-arrow right" onclick="scrollStrip('p2-hand', 100)">&#10095;</button>
+        <button class="scroll-arrow right" onclick="scrollStrip('p2-hand', 90)">&#10095;</button>
       </div>
     </div>
 
-    <!-- Battlefield & Royal Cards Display -->
-    <div id="battlefield">
-      <div class="royals-box-container">
-        <div class="royal-box">J1</div>
-        <div class="royal-box">Q2</div>
-        <div class="royal-box">K3</div>
+    <!-- Center Field & Royals Reference -->
+    <div id="playfield">
+      <div class="royals-container">
+        <div class="royal-card-box">J1</div>
+        <div class="royal-card-box">Q2</div>
+        <div class="royal-card-box">K3</div>
       </div>
-      <div id="log">Select your cards to prepare your move.</div>
+      <div class="log-message" id="game-log">Select cards to prepare your action.</div>
     </div>
 
     <!-- Player 1 Area -->
-    <div id="p1-area">
-      <div class="stats-bar">
+    <div class="player-panel" id="p1-panel">
+      <div class="player-info">
         <span>Player 1 (You)</span>
-        <span id="p1-hp">HP: 20</span>
+        <span class="hp-display" id="p1-hp">20 HP</span>
       </div>
-
-      <div class="card-strip-container">
-        <button class="scroll-arrow left" onclick="scrollStrip('p1-hand', -100)">&#10094;</button>
+      
+      <div class="card-strip-wrapper">
+        <button class="scroll-arrow left" onclick="scrollStrip('p1-hand', -90)">&#10094;</button>
         <div class="card-strip" id="p1-hand"></div>
-        <button class="scroll-arrow right" onclick="scrollStrip('p1-hand', 100)">&#10095;</button>
+        <button class="scroll-arrow right" onclick="scrollStrip('p1-hand', 90)">&#10095;</button>
       </div>
 
-      <!-- Action Controls -->
-      <div class="controls-row">
-        <button class="btn-submit" onclick="submitAction()">
-          <span class="main-label">Submit Attack / Defense</span>
-          <span class="sub-label">Max 10 / 20</span>
+      <!-- Action Button Area -->
+      <div class="controls-group">
+        <button class="btn-submit" onclick="submitMove()">
+          <span class="primary-text">Submit Attack / Defense</span>
+          <span class="secondary-text">Max 10 / 20</span>
         </button>
         <button class="btn-forfeit" onclick="forfeitGame()">Forfeit</button>
       </div>
@@ -339,131 +318,119 @@
   </div>
 
   <script>
-    // Game State Management
-    const gameState = {
+    // Game Core Mechanics
+    const state = {
       p1HP: 20,
       p2HP: 20,
       p1Hand: [],
       p2Hand: [],
-      selectedCards: [],
-      currentTurn: 'P1',
-      phase: 'Attack'
+      selectedIndices: [],
+      phase: 'Attack' // 'Attack' or 'Defense'
     };
 
     const suits = ['♠', '♥', '♦', '♣'];
-    const values = [
-      { code: 'A', name: 'A', hp: 0 },
-      { code: '2', name: '2', hp: 2 },
-      { code: '3', name: '3', hp: 3 },
-      { code: '4', name: '4', hp: 4 },
-      { code: '5', name: '5', hp: 5 },
-      { code: '6', name: '6', hp: 6 },
-      { code: '7', name: '7', hp: 7 },
-      { code: '8', name: '8', hp: 8 },
-      { code: '9', name: '9', hp: 9 },
-      { code: '10', name: '10', hp: 10 },
-      { code: 'J', name: 'J1', hp: 1 },
-      { code: 'Q', name: 'Q2', hp: 2 },
-      { code: 'K', name: 'K3', hp: 3 }
-    ];
+    const ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
 
-    function createDeck() {
+    function generateDeck() {
       const deck = [];
       for (let s of suits) {
-        for (let v of values) {
-          deck.push({ suit: s, rank: v.code, label: v.name, isRed: s === '♥' || s === '♦' });
+        for (let r of ranks) {
+          deck.push({
+            suit: s,
+            rank: r,
+            isRed: s === '♥' || s === '♦'
+          });
         }
       }
       return deck.sort(() => Math.random() - 0.5);
     }
 
-    let deck = createDeck();
+    let deck = generateDeck();
 
-    function initGame() {
-      gameState.p1Hand = deck.splice(0, 7);
-      gameState.p2Hand = deck.splice(0, 7);
-      renderHands();
+    function init() {
+      state.p1Hand = deck.splice(0, 7);
+      state.p2Hand = deck.splice(0, 7);
+      render();
     }
 
-    function renderHands() {
+    function render() {
       const p1Container = document.getElementById('p1-hand');
       const p2Container = document.getElementById('p2-hand');
 
       p1Container.innerHTML = '';
       p2Container.innerHTML = '';
 
-      gameState.p1Hand.forEach((card, index) => {
-        const cardEl = createCardElement(card, index, true);
-        p1Container.appendChild(cardEl);
+      state.p1Hand.forEach((card, i) => {
+        p1Container.appendChild(createCardUI(card, i, true));
       });
 
-      gameState.p2Hand.forEach((card, index) => {
-        const cardEl = createCardElement(card, index, false);
-        p2Container.appendChild(cardEl);
+      state.p2Hand.forEach((card, i) => {
+        p2Container.appendChild(createCardUI(card, i, false));
       });
+
+      document.getElementById('p1-hp').innerText = `${state.p1HP} HP`;
+      document.getElementById('p2-hp').innerText = `${state.p2HP} HP`;
     }
 
-    function createCardElement(card, index, isP1) {
+    function createCardUI(card, index, isP1) {
       const div = document.createElement('div');
       div.className = `card ${card.isRed ? 'red' : ''}`;
-      if (isP1 && gameState.selectedCards.includes(index)) {
+      if (isP1 && state.selectedIndices.includes(index)) {
         div.classList.add('selected');
       }
 
       div.innerHTML = `
-        <div>${card.rank}${card.suit}</div>
-        <div class="card-value-box">${card.label}</div>
+        <span class="card-rank">${card.rank}</span>
+        <span class="card-suit">${card.suit}</span>
       `;
 
       if (isP1) {
-        div.onclick = () => toggleSelectCard(index);
+        div.onclick = () => toggleSelect(index);
       }
       return div;
     }
 
-    function toggleSelectCard(index) {
-      const pos = gameState.selectedCards.indexOf(index);
+    function toggleSelect(index) {
+      const pos = state.selectedIndices.indexOf(index);
       if (pos > -1) {
-        gameState.selectedCards.splice(pos, 1);
+        state.selectedIndices.splice(pos, 1);
       } else {
-        gameState.selectedCards.push(index);
+        state.selectedIndices.push(index);
       }
-      renderHands();
+      render();
     }
 
-    function scrollStrip(id, distance) {
-      const el = document.getElementById(id);
-      el.scrollBy({ left: distance, behavior: 'smooth' });
+    function scrollStrip(stripId, amount) {
+      const el = document.getElementById(stripId);
+      el.scrollBy({ left: amount, behavior: 'smooth' });
     }
 
-    function submitAction() {
-      const log = document.getElementById('log');
-      if (gameState.selectedCards.length === 0) {
-        log.innerText = "Please select at least one card to play.";
+    function submitMove() {
+      const log = document.getElementById('game-log');
+      if (state.selectedIndices.length === 0) {
+        log.innerText = "Select at least one card first!";
         return;
       }
 
-      log.innerText = `Played ${gameState.selectedCards.length} card(s). Turn resolved!`;
-      
-      // Remove played cards
-      gameState.p1Hand = gameState.p1Hand.filter((_, idx) => !gameState.selectedCards.includes(idx));
-      gameState.selectedCards = [];
-      
-      // Replenish cards if deck remains
-      while (gameState.p1Hand.length < 7 && deck.length > 0) {
-        gameState.p1Hand.push(deck.pop());
+      log.innerText = `Submitted ${state.selectedIndices.length} card(s). Resolving turn...`;
+
+      // Mechanics hook: Filter out played cards and clear selection
+      state.p1Hand = state.p1Hand.filter((_, idx) => !state.selectedIndices.includes(idx));
+      state.selectedIndices = [];
+
+      // Draw back up to 7
+      while (state.p1Hand.length < 7 && deck.length > 0) {
+        state.p1Hand.push(deck.pop());
       }
 
-      renderHands();
+      render();
     }
 
     function forfeitGame() {
-      const log = document.getElementById('log');
-      log.innerText = "Game Over. You forfeited the match.";
+      document.getElementById('game-log').innerText = "Match forfeited.";
     }
 
-    // Initialize game state on load
-    initGame();
+    init();
   </script>
 </body>
 </html>
