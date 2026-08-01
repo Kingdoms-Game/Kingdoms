@@ -13,12 +13,9 @@
     
     html, body {
       height: 100vh;
-      height: 100dvh;
-      width: 100vw;
       margin: 0;
       padding: 0;
-      overflow: hidden; /* Hard locks overall scrolling */
-      touch-action: none;
+      overflow: hidden; /* Prevents vertical scrollbar on desktop */
     }
 
     body {
@@ -38,7 +35,6 @@
       align-items: center;
       justify-content: center;
       padding: 12px 16px;
-      box-sizing: border-box;
     }
 
     /* Main Layout Wrapper */
@@ -85,6 +81,8 @@
       opacity: 0;
       pointer-events: none;
       transition: all 0.2s ease-out;
+      width: 90%;
+      max-width: 480px;
     }
 
     #banner-overlay.show {
@@ -191,7 +189,7 @@
       box-shadow: inset 0 0 12px #000, 0 0 12px rgba(255, 215, 0, 0.4), 5px 5px 0px #000;
     }
 
-    /* Fixed Grid Header to prevent layout shifting */
+    /* Fixed Grid Header */
     .player-header {
       display: grid;
       grid-template-columns: auto 1fr auto;
@@ -259,7 +257,6 @@
       letter-spacing: 0.5px;
     }
 
-    /* Destroyed Royal State */
     .royal-marker.destroyed {
       opacity: 0.2;
       border-color: #444;
@@ -268,7 +265,6 @@
       box-shadow: none;
     }
 
-    /* Pixel Flame Effect for King Marker in King Round */
     @keyframes pixel-flame {
       0% {
         box-shadow: 0 -4px 0 #ff4500, -4px -6px 0 #ff8c00, 4px -6px 0 #ffd700, 3px 3px 0 #000;
@@ -292,7 +288,7 @@
       z-index: 15;
     }
 
-    /* Standard Hand Container */
+    /* Standard Hand Container with Side-Scrolling */
     .hand {
       display: flex;
       flex-wrap: nowrap;
@@ -303,8 +299,10 @@
       border: 4px inset #000;
       align-items: center;
       justify-content: flex-start;
-      overflow: hidden;
+      overflow-x: auto;
+      overflow-y: hidden;
       transition: all 0.3s ease;
+      -webkit-overflow-scrolling: touch;
     }
 
     .hand.large-hand {
@@ -312,7 +310,7 @@
       flex-wrap: nowrap;
       justify-content: flex-start;
       align-items: center;
-      overflow-x: hidden;
+      overflow-x: auto;
       overflow-y: visible;
       padding: 12px 8px 8px 8px;
       gap: 0;
@@ -322,7 +320,6 @@
     .hand.large-hand .card:hover,
     .hand.large-hand .card.selected { z-index: 10; }
 
-    /* Pixel Flame Transition */
     @keyframes pixel-flame-burst {
       0% { box-shadow: inset 0 0 0px #ff4500, 0 0 0px #ffd700; filter: brightness(1); }
       30% { box-shadow: inset 0 0 25px #ff4500, 0 0 20px #ff4500; filter: brightness(1.8); background: #3d0a0a; }
@@ -339,7 +336,8 @@
       height: 116px; min-height: 116px; max-height: 116px;
       flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden;
       align-items: center; justify-content: flex-start;
-      padding: 6px; gap: 16px;
+      padding: 6px; gap: 12px;
+      -webkit-overflow-scrolling: touch;
     }
 
     /* Standard Cards */
@@ -413,42 +411,167 @@
     .column-header.atk { color: #ff4444; }
     .column-header.def { color: #4a90e2; }
     .total-val { color: #ffd700; font-size: 17px; font-weight: bold; margin-left: 4px; text-shadow: 1px 1px 0px #000; }
-    .controls { margin-top: 10px; display: flex; justify-content: center; align-items: center; gap: 10px; }
+    
+    /* Horizontal Control Bar */
+    .controls {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+    }
 
-    /* Button Styling with Fixed Width Locking */
     button {
       font-family: 'Press Start 2P', monospace; font-size: 10px;
       background: #4a3d2c; color: #ffffff; border: 3px solid #000;
-      box-shadow: 3px 3px 0px #000; padding: 10px 14px; cursor: pointer;
+      box-shadow: 3px 3px 0px #000; padding: 10px 12px; cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       text-align: center;
       white-space: nowrap;
+      user-select: none;
     }
 
     button:hover { background: #5c4d38; }
     button:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0px #000; }
     button:disabled { background: #262018; color: #555; box-shadow: 3px 3px 0px #000; cursor: not-allowed; }
 
-    /* Lock action & pass buttons to identical width to stop shifting */
-    #action-btn, #pass-btn {
-      min-width: 220px;
-      height: 38px;
-    }
-
+    /* Desktop Button Widths */
     #undo-btn { 
-      min-width: 44px;
-      height: 38px;
-      padding: 0; 
-      font-size: 14px; 
+      min-width: 48px; 
+      height: 42px; 
+      font-size: 16px; 
       background: #3a3225; 
       color: #ffd700; 
+      flex: 0 0 auto;
     }
-    
-    #pass-btn { background: #8b0000; color: #ffffff; }
+
+    #action-btn { 
+      flex: 1 1 auto; 
+      min-width: 200px;
+      height: 42px; 
+      font-size: 11px;
+    }
+
+    #pass-btn { 
+      flex: 0 0 auto; 
+      min-width: 140px; 
+      height: 42px; 
+      background: #8b0000; 
+      color: #ffffff; 
+      font-size: 9px;
+    }
     #pass-btn:hover { background: #a30000; }
+
     #restart-btn { margin-top: 14px; background: #ffd700; color: #000; border-color: #000; min-width: 160px; }
+
+    /* ==========================================
+       MOBILE RESPONSIVE OVERRIDES (< 680px)
+       ========================================== */
+    @media (max-width: 680px) {
+      html, body {
+        height: auto;
+        min-height: 100vh;
+        overflow-y: auto; /* Enable smooth scrolling on phone viewports */
+      }
+
+      body {
+        padding: 8px 10px;
+        justify-content: flex-start;
+      }
+
+      h1 {
+        font-size: 20px;
+        margin-bottom: 2px;
+      }
+
+      #game-container {
+        gap: 8px;
+      }
+
+      .player-area {
+        padding: 8px;
+      }
+
+      .player-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 6px;
+        min-height: 36px;
+      }
+
+      .player-tag {
+        font-size: 18px;
+        padding-left: 0;
+      }
+
+      .role-badge {
+        font-size: 10px;
+        padding: 5px 8px;
+      }
+
+      .royal-markers {
+        gap: 4px;
+      }
+
+      .royal-marker {
+        padding: 4px 6px;
+        min-height: 28px;
+        font-size: 8px;
+      }
+
+      #arena {
+        padding: 8px;
+      }
+
+      .column-header {
+        font-size: 11px;
+      }
+
+      .total-val {
+        font-size: 13px;
+      }
+
+      /* Single Horizontal Control Plane for Mobile */
+      .controls {
+        gap: 6px;
+        margin-top: 8px;
+      }
+
+      #undo-btn {
+        min-width: 44px;
+        height: 46px;
+        font-size: 18px;
+        flex: 0 0 44px;
+      }
+
+      #action-btn {
+        height: 46px;
+        font-size: 10px;
+        padding: 6px 8px;
+        flex: 1 1 auto;
+        min-width: 0;
+      }
+
+      #pass-btn {
+        height: 46px;
+        font-size: 8px;
+        padding: 6px 8px;
+        flex: 0 0 85px;
+        min-width: 0;
+      }
+
+      #rules-link {
+        bottom: 10px;
+        right: 10px;
+        padding: 8px 10px;
+        font-size: 10px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -466,25 +589,22 @@
     <div class="rules-box" onclick="event.stopPropagation()">
       <div class="rules-title">📜 GAME RULES 📜</div>
       <div class="rules-content">
-        <p><strong>OBJECTIVE:</strong> Defeat the Enemy's Royal Family! <p><center>Jack (1 hp) ➔ Queen (2 hp) ➔ KING (3 hp)</center></p>
-        <p><strong>COMBAT:</strong></p>
+        <p><strong>OBJECTIVE:</strong> Defeat your opponent through 3 escalating phases (Jack (1 hp) ➔ Queen (2 hp) ➔ KING (3 hp)) by managing your hand and executing successful attacks.</p>
+        <p><strong>TURNS & COMBAT:</strong></p>
         <ul>
-          <p><strong>To Start:</strong> Players wield 9 cards and an Ace (wild) until a King arrives</p>
-          <li><strong>ATTACKER</strong><p> First to add cards on the Battlefield</p></li>
-          <li><strong>DEFENDER</strong><p> Equals or Exceeds Attack to -Become- the ATTACKER</p> </li>
+          <li>Attacker plays cards into the battlefield first.</li>
+          <li>Defender responds by playing cards to match or beat the attack total.</li>
         </ul>
         <p><strong>OUTCOMES:</strong></p>
         <ul>
-          <li><strong>Success</strong> <p>Attack Exceeds Defense enough to Destroy the Royal</p></li>
-          <li><strong>Blocked</strong> <p>Defense Equals or Exceeds the Attack</p>
-            <p>ROLES SWAP and play continues </p><p>Overkill is -NOT- Rewarded</p></li>
-          <li><strong>Forfeit</strong> <p>Defender can Pass to Concede the Round</p></li>
+          <li><strong>Blocked / Attack Held:</strong> Defender's total &ge; Attack total. Roles swap and play continues.</li>
+          <li><strong>Success:</strong> Attack exceeds defense by the phase threshold (Jack: 1, Queen: 2, King: 3). Defender advances phase and loses 1 HP.</li>
+          <li><strong>Forfeit:</strong> Defender can pass to concede the round.</li>
         </ul>
         <p><strong>SPECIAL RULES:</strong></p>
         <ul>
-          <li><strong>ACES</strong> can be Adjusted when Selected</li>
-          <li><strong>KING ROUNDS:</strong> when a King appears, players play with 18 cards each, and the Max doubles to 20</li>
-          <li><strong>David v. Goliath:</strong> A 2 Blocks a 10</li>
+          <li><strong>Aces (A):</strong> Are Wild (Count as 'A' initially, can be adjusted between A, 2, 3... up to 10).</li>
+          <li><strong>2 vs 10 Counter:</strong> A 2 directly blocks and nullifies an opposing 10.</li>
         </ul>
       </div>
       <button onclick="toggleRules()" style="background:#ffd700; color:#000; margin-top:6px; min-width:120px;">GOT IT</button>
@@ -527,9 +647,10 @@
         </div>
       </div>
 
+      <!-- Single Horizontal Control Plane -->
       <div class="controls">
-        <button id="action-btn" onclick="submitPlay()">SUBMIT ATTACK</button>
         <button id="undo-btn" title="Undo Selection" onclick="undoSelection()">↩</button>
+        <button id="action-btn" onclick="submitPlay()">SUBMIT ATTACK</button>
         <button id="pass-btn" onclick="passTurn()" disabled>FORFEIT / PASS</button>
       </div>
     </div>
@@ -859,7 +980,7 @@
           upBtn.innerHTML = '▲';
           upBtn.onclick = (e) => {
             e.stopPropagation();
-            if (item.wildVal === 'A' || item.wildVal === 1) {
+            if (item.wildVal === 'A') {
               item.wildVal = 2;
             } else if (item.wildVal < 10) {
               item.wildVal++;
@@ -876,8 +997,8 @@
           downBtn.onclick = (e) => {
             e.stopPropagation();
             if (item.wildVal === 2) {
-              item.wildVal = 1;
-            } else if (item.wildVal > 1) {
+              item.wildVal = 'A';
+            } else if (item.wildVal > 2 && item.wildVal <= 10) {
               item.wildVal--;
             }
             if (state.stagedWildVals[item.card.id] !== undefined) {
@@ -915,28 +1036,24 @@
 
     function calcTotal(ownItems, opposingItems = []) {
       let total = 0;
-      let ownTensCount = 0;
-
-      ownItems.forEach(item => {
-        if (item.card.val === 10 || (item.card.val === 'A' && item.wildVal === 10)) {
-          ownTensCount++;
-        }
-      });
-
+      let ownTensCount = ownItems.filter(i => i.card.val === 10 || (i.card.val === 'A' && i.wildVal === 10)).length;
       let opposingTwosCount = opposingItems.filter(i => i.card.val === 2).length;
+
       let blockedTens = Math.min(ownTensCount, opposingTwosCount);
 
       ownItems.forEach(item => {
-        let numericValue = item.card.val;
-
         if (item.card.val === 'A') {
-          numericValue = (item.wildVal === 'A' || item.wildVal === undefined) ? 1 : Number(item.wildVal);
-        }
-
-        if (numericValue === 10) {
+          if (item.wildVal !== 'A') {
+            if (item.wildVal === 10) {
+              if (blockedTens > 0) blockedTens--; else total += 10;
+            } else {
+              total += item.wildVal;
+            }
+          }
+        } else if (item.card.val === 10) {
           if (blockedTens > 0) blockedTens--; else total += 10;
         } else {
-          total += numericValue;
+          total += item.card.val;
         }
       });
 
@@ -946,36 +1063,19 @@
     async function submitPlay() {
       if (state.selectedCards.length === 0) return;
 
-      // Smart Ace Auto-Resolution Fix
+      const stagedItems = state.selectedCards.map(card => ({
+        card: card,
+        wildVal: card.val === 'A' ? state.stagedWildVals[card.id] : null
+      }));
+
+      const hasUnchosenAce = stagedItems.some(item => item.card.val === 'A' && item.wildVal === 'A');
+      if (hasUnchosenAce) {
+        await showBannerPromise("⚠️ PLEASE SELECT A CARD VALUE", "#ff4444", 1500);
+        return;
+      }
+
       let currentAttack = [...state.attackCards];
       let currentDefense = [...state.defenseCards];
-      const isDefending = state.turn !== state.attacker;
-      const targetAtk = isDefending ? calcTotal(currentAttack, currentDefense) : 0;
-
-      const stagedItems = state.selectedCards.map(card => {
-        let chosenVal = state.stagedWildVals[card.id];
-        
-        if (card.val === 'A' && (chosenVal === 'A' || chosenVal === undefined)) {
-          // If defending, calculate if Ace as 10 completes a valid block without busting MAX cap
-          if (isDefending) {
-            let tempDefWithoutAce = calcTotal([...currentDefense, ...state.selectedCards.filter(c => c !== card).map(c => ({ card: c, wildVal: state.stagedWildVals[c.id] === 'A' ? 1 : state.stagedWildVals[c.id] }))]);
-            if (tempDefWithoutAce + 10 <= state.cap && tempDefWithoutAce + 10 >= targetAtk) {
-              chosenVal = 10;
-            } else {
-              chosenVal = 1;
-            }
-          } else {
-            // Default attacker Ace to 10 if allowed under cap, otherwise 1
-            let tempAtkWithoutAce = calcTotal([...currentAttack, ...state.selectedCards.filter(c => c !== card).map(c => ({ card: c, wildVal: state.stagedWildVals[c.id] === 'A' ? 1 : state.stagedWildVals[c.id] }))]);
-            chosenVal = (tempAtkWithoutAce + 10 <= state.cap) ? 10 : 1;
-          }
-        }
-
-        return {
-          card: card,
-          wildVal: card.val === 'A' ? chosenVal : null
-        };
-      });
 
       if (state.turn === state.attacker) {
         currentAttack = [...currentAttack, ...stagedItems];
@@ -994,101 +1094,101 @@
         return;
       }
 
-      if (state.turn === state.attacker) {
-        state.attackCards = [...state.attackCards, ...stagedItems];
-        removeSelectedFromHand();
-        state.selectedCards = [];
-        state.stagedWildVals = {};
-        state.turn = state.attacker === 'Red' ? 'Black' : 'Red';
-        render();
-      } else {
-        state.defenseCards = [...state.defenseCards, ...stagedItems];
-        removeSelectedFromHand();
-        state.selectedCards = [];
-        state.stagedWildVals = {};
-        resolveCombat();
-      }
-    }
+      if (state.turn === state.attacker) { 
+        state.attackCards = [...state.attackCards, ...stagedItems]; 
+        removeSelectedFromHand(); 
+        state.selectedCards = []; 
+        state.stagedWildVals = {}; 
+        state.turn = state.attacker === 'Red' ? 'Black' : 'Red'; 
+        render(); 
+      } else { 
+        state.defenseCards = [...state.defenseCards, ...stagedItems]; 
+        removeSelectedFromHand(); 
+        state.selectedCards = []; 
+        state.stagedWildVals = {}; 
+        resolveCombat(); 
+      } 
+    } 
 
-    function removeSelectedFromHand() {
-      if (state.turn === 'Red') {
-        state.p1Hand = state.p1Hand.filter(c => !state.selectedCards.includes(c));
-      } else {
-        state.p2Hand = state.p2Hand.filter(c => !state.selectedCards.includes(c));
-      }
-    }
+    function removeSelectedFromHand() { 
+      if (state.turn === 'Red') { 
+        state.p1Hand = state.p1Hand.filter(c => !state.selectedCards.includes(c)); 
+      } else { 
+        state.p2Hand = state.p2Hand.filter(c => !state.selectedCards.includes(c)); 
+      } 
+    } 
 
-    async function resolveCombat() {
-      const atk = calcTotal(state.attackCards, state.defenseCards);
-      const def = calcTotal(state.defenseCards, state.attackCards);
+    async function resolveCombat() { 
+      const atk = calcTotal(state.attackCards, state.defenseCards); 
+      const def = calcTotal(state.defenseCards, state.attackCards); 
 
-      if (def >= atk) {
-        await showBannerPromise("🛡️ BLOCKED!", "#4a90e2", 1200);
-        await clearBattlefieldWithBlink();
-        await animateLabelSwapPromise();
-        state.turn = state.attacker;
-        render();
-      } else {
-        const gap = atk - def;
-        if (gap >= state.threshold) {
-          await showBannerPromise(`💥 SUCCESSFUL ATTACK! (+${gap})`, "#ff4444", 1500);
-          await clearBattlefieldWithBlink();
-          advancePhase();
-          return;
-        } else {
-          await showBannerPromise("⚔️ ATTACK HELD!", "#ffd700", 1200);
-          await clearBattlefieldWithBlink();
+      if (def >= atk) { 
+        await showBannerPromise("🛡️ BLOCKED!", "#4a90e2", 1200); 
+        await clearBattlefieldWithBlink(); 
+        await animateLabelSwapPromise(); 
+        state.turn = state.attacker; 
+        render(); 
+      } else { 
+        const gap = atk - def; 
+        if (gap >= state.threshold) { 
+          await showBannerPromise(`💥 SUCCESSFUL ATTACK! (+${gap})`, "#ff4444", 1500); 
+          await clearBattlefieldWithBlink(); 
+          advancePhase(); 
+          return; 
+        } else { 
+          await showBannerPromise("⚔️ ATTACK HELD!", "#ffd700", 1200); 
+          await clearBattlefieldWithBlink(); 
           
-          state.turn = state.attacker;
-          render();
-        }
-      }
-    }
+          state.turn = state.attacker; 
+          render(); 
+        } 
+      } 
+    } 
 
-    async function passTurn() {
-      await showBannerPromise("💥 DEFENSE FORFEITED!", "#ff4444", 1500);
-      await clearBattlefieldWithBlink();
-      advancePhase();
-    }
+    async function passTurn() { 
+      await showBannerPromise("💥 DEFENSE FORFEITED!", "#ff4444", 1500); 
+      await clearBattlefieldWithBlink(); 
+      advancePhase(); 
+    } 
 
-    async function advancePhase() {
-      const defender = state.attacker === 'Red' ? 'Black' : 'Red';
-      let defeated = false;
+    async function advancePhase() { 
+      const defender = state.attacker === 'Red' ? 'Black' : 'Red'; 
+      let defeated = false; 
       
-      if (defender === 'Red') {
-        if (state.p1Phase === 'Jack') state.p1Phase = 'Queen';
-        else if (state.p1Phase === 'Queen') state.p1Phase = 'King';
-        else if (state.p1Phase === 'King') defeated = true;
-      } else {
-        if (state.p2Phase === 'Jack') state.p2Phase = 'Queen';
-        else if (state.p2Phase === 'Queen') state.p2Phase = 'King';
-        else if (state.p2Phase === 'King') defeated = true;
-      }
+      if (defender === 'Red') { 
+        if (state.p1Phase === 'Jack') state.p1Phase = 'Queen'; 
+        else if (state.p1Phase === 'Queen') state.p1Phase = 'King'; 
+        else if (state.p1Phase === 'King') defeated = true; 
+      } else { 
+        if (state.p2Phase === 'Jack') state.p2Phase = 'Queen'; 
+        else if (state.p2Phase === 'Queen') state.p2Phase = 'King'; 
+        else if (state.p2Phase === 'King') defeated = true; 
+      } 
 
-      if (defeated) {
-        await showBannerPromise("👑 THOU ART VICTORIOUS! 👑", "#ffd700", 0, true);
-        return;
-      }
+      if (defeated) { 
+        await showBannerPromise("👑 THOU ART VICTORIOUS! 👑", "#ffd700", 0, true); 
+        return; 
+      } 
 
-      const isKingEntering = (state.p1Phase === 'King' || state.p2Phase === 'King');
+      const isKingEntering = (state.p1Phase === 'King' || state.p2Phase === 'King'); 
 
-      if (isKingEntering) {
-        state.cap = 20;
-        state.threshold = 3;
+      if (isKingEntering) { 
+        state.cap = 20; 
+        state.threshold = 3; 
         
-        if (!state.hasTriggeredFlameTransition) {
-          state.hasTriggeredFlameTransition = true;
-          triggerFlameHandExpansion();
-        }
-      } else if (state.p1Phase === 'Queen' || state.p2Phase === 'Queen') {
-        state.threshold = 2;
-      }
+        if (!state.hasTriggeredFlameTransition) { 
+          state.hasTriggeredFlameTransition = true; 
+          triggerFlameHandExpansion(); 
+        } 
+      } else if (state.p1Phase === 'Queen' || state.p2Phase === 'Queen') { 
+        state.threshold = 2; 
+      } 
 
-      state.turn = state.attacker;
-      initGame();
-    }
+      state.turn = state.attacker; 
+      initGame(); 
+    } 
 
-    initGame();
-  </script>
-</body>
+    initGame(); 
+  </script> 
+</body> 
 </html>
